@@ -1,0 +1,1 @@
+export { SubscriptionPluginAbi } from './SubscriptionPlugin';

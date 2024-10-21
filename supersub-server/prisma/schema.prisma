@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Accounts
+model Account {
+  id                  Int    @id @default(autoincrement())
+  eoaAddress          String @unique
+  emailAddress        String @unique
+  smartAccountAddress String @unique
+  metadata            Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  apiKey                  ApiKey?
+
+  @@index([smartAccountAddress], type: Hash)
+}
+
+// Product Types
+enum ProductType {
+  RECURRING // refers to recurring payments
+  SUBSCRIPTION // refers to subscriptions
+}
+
+// Products
+model Product {
+  id               Int         @id @default(autoincrement())
+  name             String
+  description      String
+  logoUrl          String
+  type             ProductType
+  onchainReference String         @unique
+  isActive         Boolean     @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chainId Int
+
+  creatorAddress String
+
+  plans         Plan[]
+  subscriptions Subscription[]
+}
+
+// Plans
+model Plan {
+  id               Int     @id @default(autoincrement())
+  chargeInterval   Int
+  price            Decimal
+  onchainReference String     @unique
+  isActive         Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productOnchainReference String
+  product                 Product @relation(fields: [productOnchainReference], references: [onchainReference])
+
+  chainId Int
+
+  receivingAddress String
+  destinationChain Int
+
+  tokenAddress          String
+  tokenOnchainReference String
+  token        Token  @relation(fields: [tokenOnchainReference], references: [onchainReference])
+
+
+  subscription Subscription[]
+}
+
+// Transaction Types
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  INFORMATIONAL
+}
+
+// Transaction Statuses
+enum TransactionStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
+// Transactions
+model Transaction {
+  id               Int               @id @default(autoincrement())
+  amount           Decimal
+  narration        String
+  sender           String?
+  recipient        String?
+  type             TransactionType
+  onchainReference String            
+  chainId          Int
+  status           TransactionStatus
+
+  tokenAddress String
+  tokenOnchainReference String
+  token        Token  @relation(fields: [tokenOnchainReference], references: [onchainReference])
+
+  subscriptionOnchainReference String?
+  subscription                 Subscription? @relation(fields: [subscriptionOnchainReference], references: [onchainReference])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Subscriptions
+model Subscription {
+  id                 Int       @id @default(autoincrement())
+  onchainReference   String       @unique
+  subscriptionExpiry DateTime?
+  lastChargeDate     DateTime?
+  isActive           Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chainId Int
+
+  creatorAddress String
+
+  planOnchainReference String
+  plan                 Plan @relation(fields: [planOnchainReference], references: [onchainReference])
+
+  productOnchainReference String
+  product                 Product @relation(fields: [productOnchainReference], references: [onchainReference])
+
+  subscriberAddress String
+
+  beneficiaryAddress String
+  paymentTokenAddress       String
+  paymentTokenOnchainReference       String
+  paymentToken        Token  @relation(fields: [paymentTokenOnchainReference], references: [onchainReference])
+
+
+  transactions Transaction[]
+
+}
+
+// Tokens
+model Token {
+  id       Int     @id @default(autoincrement())
+  onchainReference  String  @unique
+  decimals Int?
+  symbol   String?
+  address String
+
+  chainId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  plans     Plan[]
+  transactions Transaction[]
+  subscriptions Subscription[]
+}
+
+// API Keys
+model ApiKey {
+  id        Int    @id @default(autoincrement())
+  publicKey String @unique
+  secretKey String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accountAddress String  @unique
+  account        Account @relation(fields: [accountAddress], references: [smartAccountAddress])
+}
+
+// Cache
+model Cache {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
+  ttl   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
