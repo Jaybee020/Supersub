@@ -8,7 +8,11 @@ This is a light weight js module to help integrate your apps with the supersub
 import { SupersubSDK } from "supersub-sdk";
 
 const sdk = new SupersubSDK();
-const isSubscribed = await sdk.checkAddressSubscribedToPlan(subscriber, planId);
+const opts = {
+  subscriber: "0x1234567890123456789012345678901234567890",
+  planId: 1,
+};
+const isSubscribed = await sdk.checkAddressSubscribedToPlan(opts);
 ```
 
 ### Generate a checkout link
@@ -17,7 +21,12 @@ const isSubscribed = await sdk.checkAddressSubscribedToPlan(subscriber, planId);
 import { SupersubSDK } from "supersub-sdk";
 
 const sdk = new SupersubSDK();
-const checkoutLink = sdk.generateSubscribeCheckoutLink(planRef);
+const opts = {
+  planRef: "84532:1",
+  beneficiary: "0x1234567890123456789012345678901234567890", //optional beneficiary of the subscription benefits
+  startDate: 1679043200, //optional start date parameter
+};
+const checkoutLink = sdk.generateSubscribeCheckoutLink(opts);
 ```
 
 ### Get all subscriptions for an address
@@ -26,5 +35,10 @@ const checkoutLink = sdk.generateSubscribeCheckoutLink(planRef);
 import { SupersubSDK } from "supersub-sdk";
 
 const sdk = new SupersubSDK();
-const subscriptions = await sdk.getSubscriptionsByAddress(subscriber);
+const opts = {
+  subscriber: "0x1234567890123456789012345678901234567890",
+  minPlanId: 1, //optional minimum plan id
+  maxPlanId: 10, //optional maximum plan id
+};
+const subscriptions = await sdk.getSubscriptionsByAddress(opts);
 ```

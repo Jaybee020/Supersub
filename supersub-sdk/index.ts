@@ -32,36 +32,43 @@ export class SupersubSDK {
     this.gracePeriod = gracePeriod || 259200; //default of 3 days
   }
 
-  async checkAddressSubscribedToPlan(subscriber: string, planId: number) {
+  async checkAddressSubscribedToPlan(opts: {
+    subscriber: string;
+    planId: number;
+  }) {
     return await this.contract.isActivelySubscribedToPlan(
-      planId,
-      subscriber,
+      opts.planId,
+      opts.subscriber,
       this.gracePeriod
     );
   }
 
-  generateSubscribeCheckoutLink(planRef: string) {
-    return `https://supersub.app/checkout?planRef=${planRef}`;
+  generateSubscribeCheckoutLink(opts: {
+    planRef: string;
+    beneficiary?: string;
+    startDate?: number;
+  }) {
+    return `https://supersub.app/checkout?planRef=${opts.planRef}&subscriber=${opts.beneficiary}&startDate=${opts.startDate}`;
   }
 
-  async getSubscriptionsByAddress(
-    subscriber: Address,
-    minPlanId?: number,
-    maxPlanId?: number
-  ) {
+  async getSubscriptionsByAddress(opts: {
+    subscriber: Address;
+    minPlanId?: number;
+    maxPlanId?: number;
+  }) {
     const numOfSubscription = Number(
       await this.contract.numSubscriptionPlans()
     );
     const planIdArray = filterArrayInRange(
       Array.from({ length: numOfSubscription }, (_, i) => i), // Array of numbers
-      minPlanId || 0,
-      maxPlanId || numOfSubscription - 1
+      opts.minPlanId || 0,
+      opts.maxPlanId || numOfSubscription - 1
     );
 
     const subscriptions = await Promise.all(
       planIdArray.map(async (planId) => {
         const data = await this.contract.subscriptionStatuses(
-          subscriber,
+          opts.subscriber,
           planId
         );
         return {
