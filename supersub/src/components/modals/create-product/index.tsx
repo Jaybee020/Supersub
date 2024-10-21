@@ -10,7 +10,6 @@ import { ISubscriptionPlan } from "types/subscription";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supportedChains, supportedTokens } from "constants/data";
 import { ArrowLeft, CameraPlus, CaretDoubleRight } from "@phosphor-icons/react";
-import { defaultChain } from "utils/wagmi";
 
 const CreateProductModal = () => {
   const { createProduct } = useApp();

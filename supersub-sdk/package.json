@@ -1,0 +1,17 @@
+{
+  "name": "supersub-sdk",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Supersub"
+  ],
+  "author": "Jaybee",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ethers": "^6.13.4"
+  }
+}
