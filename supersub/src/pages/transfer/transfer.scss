@@ -1,0 +1,99 @@
+.transfer {
+  @include flex_col();
+  width: 100%;
+  height: 100%;
+
+  .withdrawal-header {
+    @include flex(column, flex-start, flex-start, 2px);
+    width: 100%;
+    font-size: 12px;
+    margin-top: 40px;
+    font-weight: 400;
+    padding-bottom: 0px;
+    p {
+      font-size: 22px;
+      font-weight: 400;
+    }
+  }
+
+  &-block {
+    @include flex(column, flex-start, flex-start, 20px);
+    width: 100%;
+    padding: 14px 14px;
+    border: $border-2d;
+    border-radius: 10px;
+
+    .copy-btn {
+      height: 100%;
+      button {
+        @include flex(column, center, center, 0px);
+        height: 100%;
+        padding-left: 10px;
+        color: $neutral-900;
+      }
+    }
+
+    .r-block {
+      @include flex(row, space-between, center, 0px);
+      width: 100%;
+    }
+
+    .details-block {
+      @include flex(row, flex-start, center, 10px);
+      flex: 1;
+      &--info {
+        @include flex(column, flex-start, flex-start, 6px);
+        .main {
+          color: $white;
+          font-size: 14px;
+        }
+        .sub {
+          font-size: 13px;
+          color: $neutral-800;
+          text-transform: capitalize;
+          &.no-transform {
+            text-transform: none;
+          }
+        }
+      }
+    }
+  }
+
+  .base-page__body {
+    .r-block {
+      @include flex(row, flex-start, center, 8px);
+      flex: 1;
+    }
+
+    .row-block {
+      @include flex(row, space-between, center);
+      width: 100%;
+
+      &.animated {
+        animation: fadeIn 0.3s ease-in-out;
+
+        @keyframes fadeIn {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+      }
+
+      .recurring-interval {
+        @include flex(row, center, center);
+        flex: 1;
+      }
+
+      &.pad {
+        padding: 10px 0px;
+      }
+
+      .recurring-label {
+        color: $neutral-900;
+      }
+    }
+  }
+}

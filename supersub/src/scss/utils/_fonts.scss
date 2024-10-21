@@ -1,0 +1,50 @@
+@font-face {
+  font-family: "Aeonik";
+  src:
+    local("Aeonik"),
+    url("/assets/fonts/Aeonik/Aeonik-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aeonik";
+  src:
+    local("Aeonik-Medium"),
+    url("/assets/fonts/Aeonik/Aeonik-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+// UNCUT SANS
+@font-face {
+  font-family: "Uncut";
+  src:
+    local("NeueMontreal-Regular"),
+    url("/assets/fonts/Uncut-Sans-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// NEUE MONTREAL
+@font-face {
+  font-family: "Neue";
+  src:
+    local("NeueMontreal-Regular"),
+    url("/assets/fonts/NeueMontreal-Regular.otf") format("otf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue";
+  src:
+    local("NeueMontreal-Medium"),
+    url("/assets/fonts/NeueMontreal-Medium.otf") format("otf");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

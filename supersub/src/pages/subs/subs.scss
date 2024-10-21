@@ -1,0 +1,108 @@
+.subs {
+  .tabs-btns {
+    @include flex(row, flex-start, center, 10px);
+    top: 0px;
+    left: 0px;
+    flex: none;
+    width: 100%;
+    padding-top: 10px;
+    position: sticky;
+    padding-bottom: 10px;
+    // border-bottom: $border-2d;
+    &--tab {
+      @include flex(row, center, center, 6px);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 12px;
+      color: $neutral-800;
+      &[data-active="true"] {
+        color: $white;
+      }
+    }
+  }
+
+  &-item {
+    @include flex(column, flex-start, flex-start, 20px);
+    width: 100%;
+    padding: 14px 14px;
+    border: $border-2d;
+    border-radius: 10px;
+
+    .options-btn {
+      height: 100%;
+      button {
+        @include flex(column, center, center, 0px);
+        height: 100%;
+        padding-left: 10px;
+      }
+    }
+
+    div {
+      @include flex(row, flex-start, center, 0px);
+    }
+    .r-block {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .details-block {
+      flex: 1;
+      gap: 10px;
+
+      &.flex-end {
+        justify-content: flex-end;
+        .details-block--info {
+          align-items: flex-end;
+        }
+      }
+      &.center {
+        justify-content: flex-end;
+        .details-block--info {
+          align-items: center;
+        }
+      }
+
+      &--icon {
+        @include flex(row, center, center, 0px);
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 50%;
+        border: $border-2;
+        color: $neutral-900;
+
+        color: $negative-500;
+        background: rgba($color: $negative-200, $alpha: 0.2);
+        border: 1px solid $negative-200;
+
+        &.no-border {
+          border: none;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &--info {
+        @include flex(column, flex-start, flex-start, 2px);
+        .main {
+          color: $white;
+          font-size: 14px;
+        }
+        .sub {
+          font-size: 12px;
+          color: $neutral-800;
+          text-transform: capitalize;
+          &.no-transform {
+            text-transform: none;
+          }
+        }
+      }
+    }
+  }
+}

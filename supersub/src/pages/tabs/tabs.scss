@@ -1,0 +1,213 @@
+.tabs {
+  @include flex_col();
+  width: 500px;
+  height: 700px;
+  height: 780px;
+  max-width: 100%;
+  padding: 10px 10px;
+  border-radius: 16px;
+  background: $tab-bg;
+  position: relative;
+
+  &-block {
+    @include flex_col();
+    gap: 0px;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  &-header {
+    @include flex(column, space-between, flex-start, 10px);
+    flex: none;
+    width: 100%;
+    height: 90px;
+    padding: 16px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+    background-size: cover;
+    background: url("/assets/images/2.jpg") no-repeat center center;
+
+    &__logo {
+      font-size: 30px;
+      font-weight: 400;
+      @include flex(row, center, center, 8px);
+    }
+
+    .bricks {
+      right: 0px;
+      top: 0px;
+      display: flex;
+      position: absolute;
+      align-items: flex-end;
+      flex-direction: column;
+
+      .indicator {
+        top: 1px;
+        right: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        position: absolute;
+        background: greenyellow;
+
+        display: none;
+      }
+
+      .version {
+        gap: 4px;
+        top: 1px;
+        right: 4px;
+        display: flex;
+        position: absolute;
+        align-items: flex-end;
+        flex-direction: column;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+
+        p {
+          font-size: 10px;
+          color: $neutral-800;
+        }
+
+        .ind {
+          width: 7px;
+          height: 7px;
+          border-radius: 2px;
+          background: #adff2fcf;
+        }
+      }
+
+      &-block {
+        $block-w: 18px; // 18px
+        width: $block-w;
+        height: $block-w;
+        background: #111;
+        border-bottom-left-radius: 4px;
+
+        &:nth-child(2) {
+          width: $block-w * 2;
+        }
+        &:nth-child(1) {
+          width: $block-w * 3;
+        }
+      }
+    }
+  }
+
+  &-screens {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    scrollbar-gutter: stable;
+    &::-webkit-scrollbar {
+      width: 4px;
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      cursor: pointer;
+      border-radius: 4px;
+      background: $neutral-100;
+    }
+
+    &:hover {
+      overflow-y: auto;
+    }
+  }
+
+  &-navigation {
+    @include flex(row, space-around, center, 10px);
+    flex: none;
+    width: 100%;
+    padding-top: 5px;
+    border-top: $border-28;
+
+    &__item {
+      @include flex(row, center, center, 6px);
+      cursor: pointer;
+      color: $gray-100;
+      font-size: 15px;
+      padding: 12px 14px;
+
+      flex: 1;
+      padding: 12px 0px;
+
+      &.active {
+        color: $white;
+      }
+    }
+  }
+
+  // @include tablet {
+  //   width: 100%;
+  //   height: 100%;
+  //   border-radius: 0px;
+  //   // background: $background;
+  //   &-header {
+  //     // display: none !important;
+  //     padding: 10px 0px;
+  //     margin-bottom: 10px;
+  //     height: max-content;
+  //     background: transparent;
+  //     &__logo {
+  //       gap: 4px;
+  //       font-size: 18px;
+  //       svg {
+  //         width: 32px;
+  //         height: 32px;
+  //       }
+  //     }
+  //   }
+  // }
+}
+
+.base-page {
+  @include flex(column, flex-start, flex-start, 0px);
+  width: 100%;
+  padding: 10px;
+
+  &__header {
+    @include flex(column, flex-start, flex-start, 2px);
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    // z-index: 100;
+    font-size: 12px;
+    // position: sticky;
+    font-weight: 400;
+    background: $tab-bg;
+    padding-bottom: 12px;
+    border-bottom: $border-2d;
+
+    &.row {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 400;
+    }
+    p {
+      font-size: 14px;
+      color: $neutral-800;
+    }
+
+    &--block {
+      @include flex(column, flex-start, flex-start, 2px);
+    }
+  }
+
+  &__body {
+    @include flex(column, flex-start, flex-start, 10px);
+    width: 100%;
+    padding: 10px 0px;
+  }
+}

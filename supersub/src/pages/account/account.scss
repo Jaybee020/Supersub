@@ -1,0 +1,299 @@
+.account {
+  @include flex_col(20px);
+  width: 100%;
+  height: 100%;
+
+  &-chart {
+    @include flex_col();
+    flex: none;
+    width: 100%;
+    height: 240px;
+    // height: 540px;
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 10px;
+    border: $border-2d;
+
+    &__header {
+      @include flex(row, flex-start, center, 10px);
+      flex: none;
+      width: 100%;
+      .details {
+        @include flex_col(4px);
+        .acct-balance,
+        .acct-address {
+          line-height: 1;
+          font-size: 18px;
+          color: $light-100;
+        }
+        .acct-balance {
+          &__eth {
+            font-size: 12px;
+            color: $neutral-800;
+          }
+        }
+      }
+    }
+
+    &__body {
+      @include flex_col(10px);
+      flex: 1;
+      width: 100%;
+      margin-top: 10px;
+
+      .chart-tooltip {
+        @include flex(column, center, center, 2px);
+        &__balance {
+          color: $white;
+          font-size: 12px;
+          font-weight: 500;
+        }
+        &__date {
+          font-size: 10px;
+          color: $neutral-800;
+        }
+      }
+    }
+
+    &__footer {
+      @include flex(row, space-between, center, 10px);
+      flex: none;
+      width: 100%;
+      .timeframe {
+        color: $white;
+        font-size: 11px;
+        cursor: pointer;
+        padding: 4px 14px;
+        border-radius: 8px;
+        background-color: $neutral-90;
+        &[data-active="true"] {
+          color: $white;
+          background-color: $g-1;
+        }
+      }
+    }
+  }
+
+  &-tabs {
+    @include flex_col(0px);
+    padding-top: 2px;
+    &__header {
+      @include flex(row, flex-start, center, 10px);
+      top: 0px;
+      left: 0px;
+      flex: none;
+      width: 100%;
+      position: sticky;
+      padding-bottom: 10px;
+      // border-bottom: $border-2d;
+      &--tab {
+        @include flex(row, center, center, 6px);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 4px 12px;
+        color: $neutral-800;
+        &[data-active="true"] {
+          color: $white;
+        }
+      }
+    }
+
+    &--assets {
+      @include flex(column, flex-start, flex-start, 0px);
+      width: 100%;
+      padding: 10px;
+
+      &__header {
+        @include flex(row, space-between, center, 10px);
+        width: 100%;
+        font-size: 12px;
+        font-weight: 400;
+        padding-bottom: 6px;
+        color: $neutral-800;
+        border-bottom: $border-2d;
+        text-transform: uppercase;
+      }
+
+      &__body {
+        @include flex(column, flex-start, flex-start, 0px);
+        width: 100%;
+      }
+
+      .acct-asset {
+        @include flex(row, space-between, center, 10px);
+        width: 100%;
+        padding: 10px 0px;
+        border-bottom: $border-2d;
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .asset-icon {
+          @include flex(row, center, center, 0px);
+          width: 32px;
+          height: 32px;
+          overflow: hidden;
+          border-radius: 50%;
+          color: $neutral-800;
+          background: $neutral-90;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
+        &__block {
+          @include flex(row, flex-start, center, 10px);
+        }
+        &__details {
+          @include flex(column, flex-start, flex-start, 2px);
+          &.flex-end {
+            align-items: flex-end;
+          }
+
+          .main {
+            color: $white;
+            font-size: 15px;
+          }
+          .sub {
+            color: $neutral-800;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    &--history {
+      @include flex(column, flex-start, flex-start, 0px);
+      width: 100%;
+      padding: 6px 0px 10px;
+
+      &__filters {
+        @include flex(row, space-between, center, 10px);
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      &__header {
+        @include flex(row, space-between, center, 10px);
+        width: 100%;
+        font-size: 12px;
+        font-weight: 400;
+        padding-bottom: 6px;
+        color: $neutral-800;
+        border-bottom: $border-2d;
+        text-transform: uppercase;
+      }
+
+      .acct-history {
+        @include flex(column, flex-start, flex-start, 20px);
+        width: 100%;
+        padding: 0px 10px;
+      }
+
+      .history-group {
+        @include flex(column, flex-start, flex-start, 10px);
+        width: 100%;
+
+        &__header {
+          @include flex(row, space-between, center, 10px);
+          width: 100%;
+          font-size: 13px;
+          font-weight: 400;
+          padding: 6px 0px 2px;
+          // color: $neutral-800;
+          // border-bottom: $border-2d;
+          text-transform: uppercase;
+        }
+
+        &__items {
+          @include flex(column, flex-start, flex-start, 10px);
+          width: 100%;
+
+          div {
+            @include flex(row, flex-start, center, 0px);
+          }
+          .r-block {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+
+          .history-item {
+            @include flex(column, flex-start, flex-start, 20px);
+            width: 100%;
+            padding: 14px 14px;
+            border: $border-2d;
+            border-radius: 10px;
+
+            .explorer-link {
+              height: 100%;
+              a {
+                @include flex(column, center, center, 0px);
+                height: 100%;
+                padding-left: 10px;
+                color: $neutral-800;
+              }
+            }
+
+            .details-block {
+              flex: 1;
+              gap: 10px;
+
+              &.flex-end {
+                justify-content: flex-end;
+                .details-block--info {
+                  align-items: flex-end;
+                }
+              }
+              &.center {
+                justify-content: flex-end;
+                .details-block--info {
+                  align-items: center;
+                }
+              }
+
+              &--icon {
+                @include flex(row, center, center, 0px);
+                width: 28px;
+                height: 28px;
+                overflow: hidden;
+                border-radius: 50%;
+                border: $border-2;
+                color: $neutral-900;
+
+                color: $negative-500;
+                background: rgba($color: $negative-200, $alpha: 0.2);
+                border: 1px solid $negative-200;
+
+                &.no-border {
+                  border: none;
+                }
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                }
+              }
+
+              &--info {
+                @include flex(column, flex-start, flex-start, 2px);
+                .main {
+                  color: $white;
+                  font-size: 14px;
+                }
+                .sub {
+                  font-size: 12px;
+                  color: $neutral-800;
+                  text-transform: capitalize;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

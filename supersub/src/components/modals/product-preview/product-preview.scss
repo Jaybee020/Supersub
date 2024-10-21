@@ -1,0 +1,43 @@
+.product-preview {
+  @include flex_col(20px);
+  flex: 1;
+  width: 100%;
+  padding: 0px 0px;
+
+  .product-plans {
+    @include flex_col(8px);
+    width: 100%;
+
+    .product-plan {
+      @include flex(row, center, center);
+
+      &--display {
+        @include flex(row, flex-start, center);
+        flex: 1;
+        padding: 10px 10px;
+        border-radius: 10px;
+        background: #282828;
+        border: 1px solid #333;
+      }
+
+      .select-plan--btn {
+        @include flex(row, center, center);
+        flex: none;
+        padding: 6px;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        border: 2px solid #333;
+
+        &__fill {
+          flex: none;
+          width: 10px;
+          height: 10px;
+          border-radius: 20px;
+          &[data-active="true"] {
+            background: $neutral-800;
+          }
+        }
+      }
+    }
+  }
+}

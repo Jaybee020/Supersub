@@ -1,0 +1,179 @@
+.products {
+  @include flex(column, flex-start, flex-start, 0px);
+  flex: 1;
+  width: 100%;
+  padding: 0px 10px 10px;
+  position: relative;
+  .base-page__header {
+    padding-top: 10px;
+  }
+
+  .szh-accordion__item-heading {
+    gap: 8px;
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+
+    .szh-accordion__item-btn {
+      @include flex(column, flex-start, flex-start, 10px);
+    }
+  }
+
+  &-item {
+    @include flex(column, flex-start, flex-start, 10px);
+    width: 100%;
+    padding: 11px 14px;
+    border: $border-2d;
+    border-radius: 10px;
+
+    &--btns {
+      @include flex(row, flex-end, center, 16px);
+    }
+
+    &__plans {
+      @include flex(row, flex-start, center);
+      width: 100%;
+      gap: 10px 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      padding: 16px 0px 10px;
+      border-top: 1px solid $neutral-150;
+
+      &--plan {
+        @include flex(row, flex-start, center);
+        flex: none;
+        font-size: 12px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        max-width: max-content;
+        background: $neutral-90;
+      }
+    }
+
+    .products-description {
+      @include flex(row, flex-start, center, 4px);
+      width: 100%;
+      font-size: 12px;
+      // padding-left: 40px;
+      color: $neutral-800;
+      p {
+        width: 100%;
+        text-align: left;
+        overflow: hidden;
+        word-break: break-all;
+        // flex-wrap: nowrap;
+        // white-space: nowrap;
+        // text-overflow: ellipsis;
+      }
+    }
+
+    .accordion-btn {
+      @include flex(column, center, center, 0px);
+      height: 100%;
+      &__trigger {
+        @include flex(column, center, center, 0px);
+        height: 26px;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        background: $neutral-100;
+        transition: transform 0.25s cubic-bezier(0, 0, 0, 1);
+        &[data-opened="true"] {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .r-block {
+      @include flex(row, space-between, flex-start, 10px);
+      gap: 10px;
+      width: 100%;
+      &.flexed {
+        flex: 1;
+        align-items: center;
+      }
+    }
+
+    .details-block {
+      gap: 10px;
+
+      &.flex-end {
+        justify-content: flex-end;
+        .details-block--info {
+          align-items: flex-end;
+        }
+      }
+      &.center {
+        justify-content: flex-end;
+        .details-block--info {
+          align-items: center;
+        }
+      }
+
+      &--icon {
+        @include flex(row, center, center, 0px);
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 50%;
+        border: $border-2;
+        color: $neutral-900;
+
+        color: $negative-500;
+        background: rgba($color: $negative-200, $alpha: 0.2);
+        border: 1px solid $negative-200;
+
+        &.no-border {
+          border: none;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &--info {
+        @include flex(column, flex-start, flex-start, 2px);
+        flex: 1;
+        .main {
+          color: $white;
+          font-size: 14px;
+        }
+        .sub {
+          @include flex(row, flex-start, flex-start, 2px);
+          font-size: 12px;
+          color: $neutral-800;
+          text-transform: capitalize;
+          &.no-transform {
+            text-transform: none;
+          }
+        }
+
+        &.centered {
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .base-page__body {
+    position: relative;
+  }
+}
+
+.create-product-trigger {
+  @include flex(row, center, center, 8px);
+  width: 46px;
+  right: 35px;
+  bottom: 85px;
+  color: $black;
+  aspect-ratio: 1;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 100%;
+  background: #ee6f61;
+}
