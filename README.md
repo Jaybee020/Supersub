@@ -6,7 +6,7 @@
     <br>
 </h1>
 
-<h3 align="center">Experience hassle-free token movement across EVM compatible chains</h3>
+<h3 align="center">Experience hassle-free Subscription on Base Blockchain</h3>
 
 <p align="center">
      <img src="https://img.shields.io/badge/Solidity-0.8.17-1f425f.svg?style=for-the-badge&logo=solidity" alt="Solidity version">
