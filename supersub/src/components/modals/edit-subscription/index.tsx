@@ -219,7 +219,11 @@ const EditSubscriptionModal = () => {
           }
         }}
       >
-        <p>Update subscription for — {activeSubscription?.product?.name}</p>
+        {activeSubscription?.product?.type === "SUBSCRIPTION" ? (
+          <p>Update subscription for — {activeSubscription?.product?.name}</p>
+        ) : (
+          <p>Update recurring payment</p>
+        )}
 
         {!loading && (
           <div className="base-btn__icon">

@@ -142,16 +142,21 @@ class PluginClient {
   }
 
   async execute(
-    param: string | UserOperationCallData | BatchUserOperationCallData
+    param: string | UserOperationCallData | BatchUserOperationCallData,
+    shouldWait = false
   ) {
     const userOp = await this.smartAccountClient.sendUserOperation({
       //@ts-ignore
       uo: param,
     });
-    const hash = await this.smartAccountClient.waitForUserOperationTransaction({
-      hash: userOp.hash,
-    });
-    return hash;
+    if (shouldWait) {
+      const hash =
+        await this.smartAccountClient.waitForUserOperationTransaction({
+          hash: userOp.hash,
+        });
+      return hash;
+    }
+    return userOp.hash;
   }
 
   async createProduct(

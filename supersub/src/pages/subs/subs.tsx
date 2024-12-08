@@ -12,7 +12,7 @@ import {
   Subtract,
 } from "@phosphor-icons/react";
 import { formatUnits } from "viem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import WalletIcon from "components/common/wallet-icon";
 import { formatTimeInterval, truncate } from "utils/HelperUtils";
@@ -22,8 +22,22 @@ import { now } from "lodash";
 const Subs = () => {
   // FETCH PRODUCTS
   const { smartAddress, unsubscribeToPlan } = useApp();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { openEditSubscriptionModal } = useModal();
   const { getAccessToken } = usePrivy();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     enabled: true,
@@ -114,6 +128,13 @@ const Subs = () => {
                         ? "weeks"
                         : "days";
 
+                console.log;
+                console.log(
+                  item?.subscriptionExpiry,
+                  dayjs().toDate(),
+                  item?.subscriptionExpiry < dayjs().toDate()
+                );
+
                 return (
                   <div key={index} className="subs-item">
                     <div className="r-block">
@@ -121,7 +142,7 @@ const Subs = () => {
                         {activeTab === "recurring" ? (
                           <WalletIcon
                             address={item?.plan?.receivingAddress}
-                            size={30}
+                            size={innerWidth > 390 ? 30 : 20}
                           />
                         ) : (
                           <div className="details-block--icon no-border">
@@ -140,7 +161,10 @@ const Subs = () => {
                           >
                             <p className="main">
                               {activeTab === "recurring"
-                                ? truncate(item?.plan?.receivingAddress, 12)
+                                ? truncate(
+                                    item?.plan?.receivingAddress,
+                                    innerWidth > 390 ? 12 : 8
+                                  )
                                 : item?.product?.name}
                             </p>
                             {activeTab === "subscriptions" && (
@@ -181,10 +205,26 @@ const Subs = () => {
 
                       <div className="details-block--info">
                         <p className="main">
-                          {!item?.isActive ? "Status" : "Next charge"}
+                          {!item?.isActive
+                            ? "Status"
+                            : item?.subscriptionExpiry < dayjs().toDate()
+                              ? "Expired At"
+                              : "Next charge"}
                         </p>
                         {!item?.isActive ? (
                           <p className="sub">Inactive</p>
+                        ) : item?.subscriptionExpiry < dayjs().toDate() ? (
+                          <>
+                            {item.createdAt && (
+                              <p className="sub">
+                                {item?.subscriptionExpiry
+                                  ? dayjs(item?.subscriptionExpiry).format(
+                                      "MMM DD, YYYY"
+                                    )
+                                  : dayjs(now()).format("MMM DD, YYYY")}
+                              </p>
+                            )}
+                          </>
                         ) : (
                           <>
                             {item.createdAt && (

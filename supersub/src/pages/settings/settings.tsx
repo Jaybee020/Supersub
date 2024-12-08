@@ -22,18 +22,15 @@ const Settings = () => {
     enabled: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: false,
-    queryKey: ["email", smartAddress],
+    queryKey: ["email", smartAddress ?? ""],
     queryFn: async () => {
-      const token = await getAccessToken();
-      return await axios
-        .get(`/api/email/${smartAddress}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) =>
-          res.data.data.email ? setDestination(res.data.data.email) : "No Email"
-        );
+      return await axios.get(`/api/email/${smartAddress}`, {}).then((res) => {
+        if (res.data.data.email) {
+          setDestination(res.data.data.email);
+        }
+
+        return res.data.data.email;
+      });
     },
   });
 

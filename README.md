@@ -6,7 +6,7 @@
     <br>
 </h1>
 
-<h3 align="center">Experience hassle-free Subscription on Base Blockchain</h3>
+<h3 align="center">Experience hassle-free Subscription on Blockchain </h3>
 
 <p align="center">
      <img src="https://img.shields.io/badge/Solidity-0.8.17-1f425f.svg?style=for-the-badge&logo=solidity" alt="Solidity version">
@@ -58,7 +58,8 @@ Key features of Supersub include:
 - **Multi Chain Compatibility**: Users can easily send and receive one-time and recurring payments across multiple EVM-compatible blockchains, including Ethereum, Arbitrum, and Optimism. This ensures seamless transactions across different networks, providing a smooth and efficient payment experience.
 - **Continuous Automation of Payments**: Our model ensures that payments are processed automatically, reducing the need for manual intervention and enhancing user experience. It also allows for token swaps and conversions, making it a versatile platform for a wide range of subscription services.
 - **Transparency and Control**: With every transaction recorded on the blockchain, subscribers and service providers gain unprecedented transparency and control over their subscription agreements.
-- **Cost-Effective**: By removing intermediaries and using Base's blockchain technology, Supersub offers a cost-effective solution for managing subscription payments.
+- **Cost-Effective**: By removing intermediaries and using blockchain technology, Supersub offers a cost-effective solution for managing subscription payments.
+- **Automatic analytics**: By integrating the Request Network, Supersub provides invoices and analytics for processed payments, enabling businesses to track their subscription revenue and make informed decisions.
 
 In this way, Supersub not only addresses the issues of centralization and censorship but also empowers businesses with seamless subscription management while offering subscribers more control and flexibility over their payments. Join us in shaping the future of digital subscriptions.
 
@@ -68,6 +69,7 @@ In this way, Supersub not only addresses the issues of centralization and censor
 
 Supersub leverages smart contract wallets designed according to the ERC-6900 standard. This standard offers a secure and reliable framework for the easy onboarding and management of user accounts.
 A standout feature of our implementation is the abstraction of gas payments, which means users are not required to hold native tokens to cover gas fees. By utilizing paymaster functionality, we significantly simplify the user experience, allowing users to engage with our platform without the complexities of managing gas fees.
+The smart accounts have the ability to automatically processes a payment request when certain conditions are met. This provides trustless and secure payment processing without the need for manual intervention.
 
 #### 2. Subscription Plugin
 
@@ -79,7 +81,7 @@ Supersub implements a token bridge that enables seamless transfers of supported 
 
 #### 4. Affordable Transaction Fees
 
-Due to Base's low gast cost, we are able to come up with a reasonable fee structure by capping the maximum percenatage used as the fee to a value of 7.5%. Lower values would be used as long as the fee percentage covers the gas cost of the charge transaction.
+Due to low gast cost, we are able to come up with a reasonable fee structure by capping the maximum percenatage used as the fee to a value of 7.5%. Lower values would be used as long as the fee percentage covers the gas cost of the charge transaction.
 
 #### 5.Request Network
 
@@ -92,6 +94,8 @@ We're committed to continuous improvement. Here's what's in the pipeline:
 - **Supersub SDK:** We're working on a Supersub SDK to simplify the integration process and enhance the developer experience.
 
 - **Fiat On & Off-Ramp:** We plan to introduce a feature that will allow you to easily convert between digital assets and fiat currency.
+
+- **Integrate Request:** We plan to intergrate the Request Network for other payment options like swap to pay an crosschain payments in the future. We would also love to work and integrate suitable on and off-ramp services for fiat currencies.
 
 Stay tuned for these exciting enhancements!
 
@@ -142,9 +146,9 @@ Here are a few ways you can get involved:
 
 <sup>[(Back to top)](#------------------------)</sup>
 
-Meet the creative minds who brought this project to life:
+<!-- Meet the creative minds who brought this project to life:
 
 | **Name**        | **Role**                                 | **GitHub**                             |
 | --------------- | ---------------------------------------- | -------------------------------------- |
 | Olayinka Ganiyu | Smart Contract & Backend Engineer (LxLy) | [GitHub](https://github.com/Jaybee020) |
-| Kester Atakere  | Designer & Frontend Engineer             | [GitHub](https://github.com/codergon)  |
+| Kester Atakere  | Designer & Frontend Engineer             | [GitHub](https://github.com/codergon)  | -->
