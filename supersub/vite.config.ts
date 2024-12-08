@@ -4,9 +4,6 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  define: {
-    "process.env": process.env,
-  },
   server: {
     port: 3032,
   },
@@ -17,7 +14,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-        maximumFileSizeToCacheInBytes: 4580000,
+        maximumFileSizeToCacheInBytes: 4780000,
       },
 
       manifest: {

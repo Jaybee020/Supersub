@@ -4,9 +4,18 @@ import { logger } from '~/pkg/logging';
 import { config } from '~/pkg/env';
 
 import { application } from './app';
+import { prisma } from './pkg/db';
 
-const server = application.listen(config.PORT, () => {
+const server = application.listen(config.PORT, async () => {
   console.log('Listening on port', config.PORT || process.env.PORT);
+  // await prisma.subscription.deleteMany({});
+  // await prisma.plan.deleteMany({});
+  // await prisma.transaction.deleteMany({});
+  // await prisma.token.deleteMany({});
+  // await prisma.cache.deleteMany({});
+  // await prisma.apiKey.deleteMany({});
+  // await prisma.account.deleteMany({});
+  // await prisma.product.deleteMany({});
   logger.debug(`server is running on port ${config.PORT}`);
 });
 

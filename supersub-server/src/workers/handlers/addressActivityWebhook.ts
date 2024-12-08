@@ -52,8 +52,8 @@ export const handleAlchemyAddressActivityWebhook = async (webhook: AlchemyWebhoo
         : zeroAddress;
       const amount = fromHex(activity.rawContract.rawValue as `0x${string}`, 'bigint').toString();
 
-      const withdrawalNarration = `Sent ${activity.value} ${activity.asset} to ${toAddress}`;
-      const depositNarration = `Received ${activity.value} ${activity.asset} from ${fromAddress}`;
+      const withdrawalNarration = `Withdrawal`;
+      const depositNarration = `Deposit`;
 
       await prisma.token.createMany({
         data: [
@@ -82,7 +82,7 @@ export const handleAlchemyAddressActivityWebhook = async (webhook: AlchemyWebhoo
           },
           {
             tokenOnchainReference: `${chainId}:${tokenAddress}`,
-            onchainReference: `${chainId}:{activity.hash}`,
+            onchainReference: `${chainId}:${activity.hash}`,
             narration: depositNarration,
             recipient: toAddress,
             sender: fromAddress,

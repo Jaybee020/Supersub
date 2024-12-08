@@ -11,6 +11,8 @@ import { ITokenBridge } from "./interfaces/ITokenBridge.sol";
 import { IWETH } from "./interfaces/IWETH.sol";
 import { IUniswapV3Factory } from "./interfaces/IUniswapV3Factory.sol";
 import { ISwapRouter } from "./interfaces/IUniswapV3Router.sol";
+import { IERC20FeeProxy } from "./interfaces/IERC20FeeProxy.sol";
+import { IEthereumFeeProxy } from "./interfaces/IEthereumFeeProxy.sol";
 import { ITokenBridge } from "./interfaces/ITokenBridge.sol";
 
 /// @title Counter Plugin
@@ -49,6 +51,8 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
     address public immutable swapRouter;
     address public immutable swapFactory;
     address public tokenBridge;
+    address public ethFeeProxy;
+    address public erc20FeeProxy;
 
     enum ProductType {
         RECURRING,
@@ -131,7 +135,8 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
         address indexed beneficiary,
         address paymentToken,
         uint256 paymentAmount,
-        uint256 timestamp
+        uint256 timestamp,
+        bytes indexed paymentReference
     );
 
     constructor(
@@ -142,7 +147,9 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
         address swapFactoryAddr,
         address swapRouterAddr,
         address _WETH,
-        address _tokenBridge
+        address _tokenBridge,
+        address _ethFeeProxy,
+        address _erc20FeeProxy
     ) {
         currentChainId = chainId;
         swapFactory = swapFactoryAddr;
@@ -150,6 +157,8 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
         owner = msg.sender;
         tokenBridge = _tokenBridge;
         WETH = _WETH;
+        ethFeeProxy = _ethFeeProxy;
+        erc20FeeProxy = _erc20FeeProxy;
         require(_chainIds.length == _ccipChainSelectors.length, "Chain selector lengths do not metch");
         for (uint i = 0; i < _supportedBridgingTokens.length; i++) {
             supportedBridgingTokens[_supportedBridgingTokens[i]] = true;
@@ -415,7 +424,8 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
     //To-Do
     //Bridging Provider should handle swapping and bridging to destination chain
     //should also handle native ETH withdrawal on same chain. Swapping only gives WETH
-    function charge(uint256 planId, address beneficiary) public isActivePlan(planId) {
+    function charge(uint256 planId, address beneficiary, address feeRecipient,uint8 feePercentage,bytes calldata _paymentReference) public isActivePlan(planId) {
+        require(feePercentage<10,"FeePercentage should be less than 10");
         require(hasSubscribedToPlan(planId, beneficiary), "User not subscribed to plan");
         SubscriptionPlan memory plan = subscriptionPlans[planId];
         UserSubscription storage userSubscription = subscriptionStatuses[beneficiary][planId];
@@ -423,26 +433,34 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
         require(userSubscription.startTime <= block.timestamp, "subscription is yet to start");
         require(userSubscription.endTime == 0 || userSubscription.endTime >= block.timestamp, "subscription has ended");
         userSubscription.lastChargeDate = block.timestamp;
+        uint256 feeAmount = (plan.price * feePercentage) / 100;
         uint256 paymentAmount;
         if (plan.destinationChain == currentChainId) {
             if (plan.tokenAddress == userSubscription.paymentToken) {
                 paymentAmount = plan.price;
                 if (plan.tokenAddress == address(0)) {
+                    bytes memory callData = abi.encodeCall(IEthereumFeeProxy.transferWithReferenceAndFee, (payable(plan.receivingAddress), _paymentReference, feeAmount, payable(feeRecipient)));
                     IPluginExecutor(userSubscription.chargedAddress).executeFromPluginExternal(
-                        plan.receivingAddress,
+                        ethFeeProxy,
                         plan.price,
-                        "0x"
+                        callData
                     );
                 } else {
-                    bytes memory callData = abi.encodeCall(IERC20.transfer, (plan.receivingAddress, plan.price));
+                    bytes memory approveCallData = abi.encodeCall(IERC20.approve, (erc20FeeProxy, plan.price));
                     IPluginExecutor(userSubscription.chargedAddress).executeFromPluginExternal(
                         plan.tokenAddress,
+                        0,
+                        approveCallData
+                    );
+                    bytes memory callData = abi.encodeCall(IERC20FeeProxy.transferFromWithReferenceAndFee, (plan.tokenAddress, plan.receivingAddress, plan.price - feeAmount, _paymentReference, feeAmount, feeRecipient));
+                    IPluginExecutor(userSubscription.chargedAddress).executeFromPluginExternal(
+                        erc20FeeProxy,
                         0,
                         callData
                     );
                 }
             } else {
-                //execute swap
+                //execute swap. TO DO Implement with Request Network Swap To Pay 
                 paymentAmount = executeSwap(
                     userSubscription.chargedAddress,
                     plan.receivingAddress,
@@ -480,7 +498,7 @@ contract ProductSubscriptionManagerPlugin is BasePlugin {
             }
         }
 
-        emit SubscriptionCharged(planId, beneficiary, userSubscription.paymentToken, paymentAmount, block.timestamp);
+        emit SubscriptionCharged(planId, beneficiary, userSubscription.paymentToken, paymentAmount, block.timestamp, _paymentReference);
     }
 
     function hasSubscribedToPlan(uint256 planId, address beneficiary) public view returns (bool) {

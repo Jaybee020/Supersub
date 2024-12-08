@@ -2,9 +2,12 @@ import millify from "millify";
 import { useAccountData } from "contexts";
 import { Coin } from "@phosphor-icons/react";
 import { supportedTokens } from "constants/data";
+import { getAddress, ZeroAddress } from "ethers";
+import { getSignificantDigits } from "utils/HelperUtils";
 
 const AccountAssets = () => {
-  const { activeCurrency, acctTokens, tokenPrices } = useAccountData();
+  const { activeCurrency, acctTokens, tokenPrices, ethBalance } =
+    useAccountData();
 
   return (
     <div className="account-tabs--assets">
@@ -42,13 +45,17 @@ const AccountAssets = () => {
                   <div className="asset-icon">
                     {token.logo ||
                     supportedTokens[
-                      token.contractAddress as keyof typeof supportedTokens
+                      getAddress(
+                        token.contractAddress
+                      ) as keyof typeof supportedTokens
                     ]?.image_url ? (
                       <img
                         src={
                           token.logo ??
                           supportedTokens[
-                            token.contractAddress as keyof typeof supportedTokens
+                            getAddress(
+                              token.contractAddress
+                            ) as keyof typeof supportedTokens
                           ]?.image_url
                         }
                         alt=""
@@ -76,7 +83,12 @@ const AccountAssets = () => {
                     {!isNaN(Number(token.balance))
                       ? Number(token.balance) > 1000
                         ? millify(Number(token.balance), { precision: 2 })
-                        : Number(token.balance).toFixed(2)
+                        : getSignificantDigits(
+                            token?.balance?.toString() || "0",
+                            (token?.decimals || 18) > 18
+                              ? 18
+                              : token?.decimals || 18
+                          )
                       : ""}
                   </p>
 

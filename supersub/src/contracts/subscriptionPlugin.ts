@@ -19,9 +19,10 @@ import {
 import { SubscriptionTokenBridge } from "./typechain-types";
 import { Subscription } from "./subscription";
 import { defaultChain } from "utils/wagmi";
+import { baseSepolia, polygonAmoy, sepolia } from "viem/chains";
 
 interface Plan {
-  price: number;
+  price: number | bigint;
   chargeInterval: number;
   tokenAddress: string;
   receivingAddress: string;
@@ -36,8 +37,12 @@ interface Product {
 
 function getWrappedEtherByChain(chainId: number) {
   switch (chainId) {
-    case 84532:
+    case baseSepolia.id:
       return "0x4200000000000000000000000000000000000006";
+    case sepolia.id:
+      return "0xfff9976782d46cc05630d1f6ebab18b2324d6b14";
+    case polygonAmoy.id:
+      return "";
     default:
       return "0x4200000000000000000000000000000000000006";
   }
@@ -92,7 +97,6 @@ class PluginClient {
       //@ts-ignore
       await accountLoupeActionsExtendedClient.getInstalledPlugins({});
 
-    console.log(installedPlugins);
     if (
       installedPlugins
         .map((addr) => addr.toLowerCase())
@@ -108,19 +112,32 @@ class PluginClient {
       await this.subscriptionManagerPlugin.getDependency();
     const accountLoupeActionsExtendedClient =
       this.smartAccountClient.extend(pluginManagerActions);
-    //@ts-ignore
-    await accountLoupeActionsExtendedClient.installPlugin({
-      pluginAddress: this.pluginAddress,
-      dependencies: pluginependency,
+    const userOpReceipt = await accountLoupeActionsExtendedClient.installPlugin(
+      //@ts-ignore
+      {
+        pluginAddress: this.pluginAddress,
+        dependencies: pluginependency,
+      }
+    );
+    await this.smartAccountClient.waitForUserOperationTransaction({
+      hash: userOpReceipt.hash,
     });
   }
 
-  async uninstallPlugin(addr: Address) {
+  async uninstallPlugin() {
     const accountLoupeActionsExtendedClient =
       this.smartAccountClient.extend(pluginManagerActions);
-    //@ts-ignore
-    await accountLoupeActionsExtendedClient.uninstallPlugin({
-      pluginAddress: this.pluginAddress,
+
+    const userOpReceipt =
+      await accountLoupeActionsExtendedClient.uninstallPlugin(
+        //@ts-ignore
+        {
+          pluginAddress: this.pluginAddress,
+        }
+      );
+
+    await this.smartAccountClient.waitForUserOperationTransaction({
+      hash: userOpReceipt.hash,
     });
   }
 
@@ -328,7 +345,6 @@ class PluginClient {
       await this.subscriptionManagerPlugin.getSubscriptionPlanById(planId);
 
     const isPluginInstalled = await this.isPluginInstalled();
-    console.log("Subscription Plugin installation status: ", isPluginInstalled);
     if (!isPluginInstalled) {
       await this.installPlugin();
       console.log("Installed subscription Plugin");
@@ -372,10 +388,11 @@ class PluginClient {
     return hash;
   }
 
-  async unSubscribe(planId: number) {
+  async unSubscribe(planId: number, beneficiary: string) {
     const unsubscribeParams =
       this.subscriptionManagerPlugin.encodeUnsubscribeFunctionParamas(
-        planId
+        planId,
+        beneficiary
       ) as any;
     const isPluginInstalled = await this.isPluginInstalled();
     if (isPluginInstalled) {
@@ -407,6 +424,25 @@ class PluginClient {
       );
     if (!paymentToken) {
       paymentToken = subscription[3];
+    } else {
+      const subscriptionPlan =
+        await this.subscriptionManagerPlugin.getSubscriptionPlanById(planId);
+
+      if (paymentToken != subscriptionPlan[5]) {
+        const factory =
+          await this.subscriptionManagerPlugin.contract.swapFactory();
+        const fee = (
+          await this.subscriptionManagerPlugin.getV3PairAddress(
+            factory,
+            subscriptionPlan[5],
+            paymentToken
+          )
+        ).fee;
+        if (fee === undefined) {
+          throw new Error("Fee not found for selected tokens");
+        }
+        paymentTokenSwapFee = fee;
+      }
     }
     if (!endTime) {
       endTime = Number(subscription[2]);

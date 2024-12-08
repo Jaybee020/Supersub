@@ -1,21 +1,28 @@
 import "./subs.scss";
 import axios from "axios";
-import { useApp } from "contexts";
+import { useApp, useModal } from "contexts";
 import { usePrivy } from "@privy-io/react-auth";
 import { useQuery } from "@tanstack/react-query";
 import { Menu, MenuItem } from "@szhsin/react-menu";
 import EmptyState from "components/common/empty-state";
-import { DotsThreeVertical, SealCheck, Subtract } from "@phosphor-icons/react";
+import {
+  DotsThreeVertical,
+  PencilSimple,
+  SealCheck,
+  Subtract,
+} from "@phosphor-icons/react";
 import { formatUnits } from "viem";
 import { useState } from "react";
 import dayjs from "dayjs";
 import WalletIcon from "components/common/wallet-icon";
-import { truncate } from "utils/HelperUtils";
+import { formatTimeInterval, truncate } from "utils/HelperUtils";
 import { defaultChain } from "utils/wagmi";
+import { now } from "lodash";
 
 const Subs = () => {
   // FETCH PRODUCTS
-  const { smartAddress, unsubscribe } = useApp();
+  const { smartAddress, unsubscribeToPlan } = useApp();
+  const { openEditSubscriptionModal } = useModal();
   const { getAccessToken } = usePrivy();
 
   const { data, isLoading, error } = useQuery({
@@ -40,8 +47,6 @@ const Subs = () => {
   });
 
   const [activeTab, setActiveTab] = useState("subscriptions");
-
-  console.log(data);
 
   return (
     <div className="subs base-page">
@@ -115,7 +120,7 @@ const Subs = () => {
                       <div className="details-block">
                         {activeTab === "recurring" ? (
                           <WalletIcon
-                            address={item?.product?.receivingAddress}
+                            address={item?.plan?.receivingAddress}
                             size={30}
                           />
                         ) : (
@@ -135,7 +140,7 @@ const Subs = () => {
                           >
                             <p className="main">
                               {activeTab === "recurring"
-                                ? truncate(item?.product?.receivingAddress, 12)
+                                ? truncate(item?.plan?.receivingAddress, 12)
                                 : item?.product?.name}
                             </p>
                             {activeTab === "subscriptions" && (
@@ -169,15 +174,7 @@ const Subs = () => {
                             {/*
                              * FORMAT TIMEFRAMES
                              */}
-                            {`${
-                              timeframes[selectedTimeframe] > 1
-                                ? timeframes[selectedTimeframe] + " "
-                                : ""
-                            }${
-                              timeframes[selectedTimeframe] > 1
-                                ? selectedTimeframe
-                                : selectedTimeframe.slice(0, -1)
-                            }`}
+                            {`${formatTimeInterval(item?.plan?.chargeInterval)}`}
                           </p>
                         </div>
                       </div>
@@ -192,54 +189,76 @@ const Subs = () => {
                           <>
                             {item.createdAt && (
                               <p className="sub">
-                                {dayjs(item?.lastChargeDate)
-                                  .add(item?.plan?.chargeInterval, "seconds")
-                                  .format("MMM DD, YYYY")}
+                                {item?.lastChargeDate
+                                  ? dayjs(item?.lastChargeDate)
+                                      .add(
+                                        item?.plan?.chargeInterval,
+                                        "seconds"
+                                      )
+                                      .format("MMM DD, YYYY")
+                                  : dayjs(now()).format("MMM DD, YYYY")}
                               </p>
                             )}
                           </>
                         )}
                       </div>
 
-                      <div className="app-menu__container">
-                        <Menu
-                          transition
-                          align={"end"}
-                          direction={"bottom"}
-                          menuButton={
-                            <button
-                              style={{
-                                width: "30px",
-                                height: "30px",
-                                display: "flex",
-                                cursor: "pointer",
-                                marginLeft: "20px",
-                                alignItems: "flex-end",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <DotsThreeVertical size={16} weight="regular" />
-                            </button>
-                          }
-                          menuClassName={`app-menu`}
+                      <div
+                        style={{ marginLeft: "15px" }}
+                        className="products-item--btns"
+                      >
+                        <div
+                          className="default-btn rounded"
+                          onClick={() => {
+                            openEditSubscriptionModal(item);
+                          }}
                         >
-                          {["unsubscribe"].map((slug, ind) => (
-                            <MenuItem
-                              key={ind}
-                              value={slug}
-                              data-active={true}
-                              onClick={() => {
-                                unsubscribe(item?.onchainReference); //TODO: change unsubscribe function
-                              }}
-                              className={`menu-item ${slug === "unsubscribe" ? "unsubscribe" : ""}`}
-                            >
-                              <p style={{ textTransform: "capitalize" }}>
-                                {slug}
-                              </p>
-                            </MenuItem>
-                          ))}
-                        </Menu>
+                          <PencilSimple size={14} weight="fill" />
+                        </div>
+
+                        <div className="app-menu__container">
+                          <Menu
+                            transition
+                            align={"end"}
+                            direction={"bottom"}
+                            menuButton={
+                              <button
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  display: "flex",
+                                  cursor: "pointer",
+                                  // marginLeft: "20px",
+                                  alignItems: "flex-end",
+                                  flexDirection: "column",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <DotsThreeVertical size={16} weight="regular" />
+                              </button>
+                            }
+                            menuClassName={`app-menu`}
+                          >
+                            {["unsubscribe"].map((slug, ind) => (
+                              <MenuItem
+                                key={ind}
+                                value={slug}
+                                data-active={true}
+                                onClick={() => {
+                                  unsubscribeToPlan(
+                                    item?.id,
+                                    item?.beneficiary
+                                  ); //TODO: change unsubscribe function
+                                }}
+                                className={`menu-item ${slug === "unsubscribe" ? "unsubscribe" : ""}`}
+                              >
+                                <p style={{ textTransform: "capitalize" }}>
+                                  {slug}
+                                </p>
+                              </MenuItem>
+                            ))}
+                          </Menu>
+                        </div>
                       </div>
                     </div>
                   </div>

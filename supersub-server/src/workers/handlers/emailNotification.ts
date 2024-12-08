@@ -1,4 +1,4 @@
-import { arbitrumSepolia, optimismSepolia, polygonAmoy, baseSepolia, sepolia, base } from 'viem/chains';
+import { arbitrumSepolia, optimismSepolia, polygonAmoy, baseSepolia, sepolia } from 'viem/chains';
 import { fraxtalSepolia } from '@alchemy/aa-core';
 import { ProductType } from '@prisma/client';
 import { formatUnits } from 'viem';
@@ -27,18 +27,18 @@ export const notifyUsersForUpcomingSubscriptionRenewal = async () => {
     const now = dayjs();
     const in24Hours = now.add(24, 'hours');
 
-    const upcomingRenewals = await prisma.subscription.findMany({
+    let upcomingRenewals = await prisma.subscription.findMany({
       where: {
         OR: [
           {
-            createdAt: { lt: in24Hours.toDate() },
+            // createdAt: { lt: now.subtract(1, 'hour').toDate() },
             lastChargeDate: null,
           },
           {
             lastChargeDate: { lt: in24Hours.subtract(1, 'seconds').toDate() },
           },
         ],
-        subscriptionExpiry: { gt: in24Hours.toDate() },
+        // subscriptionExpiry: { lt: now.toDate() },
         product: { isActive: true },
         plan: { isActive: true },
         isActive: true,
@@ -50,6 +50,12 @@ export const notifyUsersForUpcomingSubscriptionRenewal = async () => {
       },
     });
 
+    upcomingRenewals = upcomingRenewals.filter((sub) => {
+      if (!sub.subscriptionExpiry) return true;
+      if (!sub.lastChargeDate) return true;
+      if (sub.subscriptionExpiry < now.toDate()) return false;
+      return sub.lastChargeDate < now.subtract(sub.plan.chargeInterval, 'seconds').toDate();
+    });
     if (upcomingRenewals.length === 0) {
       logger.info('No upcoming subscription renewals found');
       return;
@@ -61,7 +67,7 @@ export const notifyUsersForUpcomingSubscriptionRenewal = async () => {
       const subscriber = await prisma.account.findUnique({
         where: { smartAccountAddress: renewals.subscriberAddress },
       });
-      if (subscriber) {
+      if (subscriber && subscriber.emailAddress) {
         subscribersToNotify.push({
           ...renewals,
           subscriber,
@@ -145,5 +151,17 @@ Thank you for your continued support!
 
 Best regards,
 SuperSub Team.
+`;
+};
+
+export const getChargeNotificationBodyTemplate = (options: { chargeStatus: boolean; email: string; url: string }) => {
+  return options.chargeStatus
+    ? `
+Hello ${options.email},;
+Your subscription was successfully processed. Click the link below to view your invoice.
+  ${options.url}
+`
+    : `Hello ${options.email},;
+Your subscription failed to process. Please check your balance. If you have any questions or need assistance, please reach out to our support team.
 `;
 };

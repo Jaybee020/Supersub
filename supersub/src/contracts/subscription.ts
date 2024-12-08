@@ -65,7 +65,6 @@ export class Subscription {
       const fee = feeRanges[i];
       try {
         pairAddress = await factory.getPool(token0, token1, fee);
-        console.log(pairAddress);
       } catch (err) {}
 
       if (
@@ -75,13 +74,15 @@ export class Subscription {
         return { pairAddress, fee };
     }
 
+    throw new Error("Pair not found for selected tokens");
+
     return { pairAddress: undefined, fee: undefined };
   }
 
   encodeCreateRecurringPaymentParams(
     productId: number,
     initPlans: {
-      price: number;
+      price: number | bigint;
       chargeInterval: number;
       tokenAddress: string;
       receivingAddress: string;
@@ -94,7 +95,6 @@ export class Subscription {
       description: string;
     }
   ) {
-    console.log(initPlans);
     return this.contract.interface.encodeFunctionData(
       "createRecurringPayment",
       [
@@ -114,20 +114,25 @@ export class Subscription {
     logoURL: string,
     productType: 0 | 1,
     initPlans?: {
-      price: number;
+      price: number | bigint;
       chargeInterval: number;
       tokenAddress: string;
       receivingAddress: string;
       destinationChain: number;
     }[]
   ) {
-    return this.contract.interface.encodeFunctionData("createProduct", [
-      encodeBytes32String(name),
-      description,
-      logoURL,
-      productType,
-      initPlans || [],
-    ]);
+    try {
+      const data = this.contract.interface.encodeFunctionData("createProduct", [
+        encodeBytes32String(name),
+        description,
+        logoURL,
+        productType,
+        initPlans || [],
+      ]);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   encodeUpdateProductParams(productId: number, isActive: boolean) {
@@ -199,8 +204,11 @@ export class Subscription {
     );
   }
 
-  encodeUnsubscribeFunctionParamas(planId: number) {
-    return this.contract.interface.encodeFunctionData("unsubscribe", [planId]);
+  encodeUnsubscribeFunctionParamas(planId: number, beneficiary: string) {
+    return this.contract.interface.encodeFunctionData("unsubscribe", [
+      planId,
+      beneficiary,
+    ]);
   }
 
   async charge(planId: number, subscriber: string) {
@@ -232,7 +240,6 @@ export class Subscription {
     const numOfSubscription = Number(
       await this.contract.numSubscriptionPlans()
     );
-    console.log(await this.checkAddressSubscribedToPlan(subscriber, 0));
     const numbers = Array.from({ length: numOfSubscription }, (_, i) => i); // Array of numbers from 0 to 100
     const filteredNumbers = filterArrayInRange(
       numbers,

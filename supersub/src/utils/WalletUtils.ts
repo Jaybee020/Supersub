@@ -16,14 +16,14 @@ const generateSmartWallet = async (privyEoa: ConnectedWallet) => {
   const privySigner = new WalletClientSigner(privyClient, "json-rpc");
   await createModularAccountAlchemyClient({
     transport: alchemy({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }),
-    chain: baseSepolia,
+    chain: defaultChain,
     signer: privySigner,
   });
 
   const smartAccountClient = await createModularAccountAlchemyClient({
     signer: privySigner,
     transport: alchemy({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }),
-    chain: baseSepolia,
+    chain: defaultChain,
     policyId: import.meta.env.VITE_ACCOUNT_ABSTRATION_POLICY_ID,
   });
 

@@ -17,8 +17,10 @@ import {
   CopySimple,
   CheckCircle,
   CaretDoubleRight,
+  ArrowsIn,
+  EscalatorUp,
 } from "@phosphor-icons/react";
-import { defaultChain } from "utils/wagmi";
+import { defaultChain, defaultToken } from "utils/wagmi";
 
 //change default tokens and chains and images
 const Transfer = () => {
@@ -42,11 +44,9 @@ const Transfer = () => {
 
   const [interval, setInterval] = useState("");
 
-  const [chargeToken, setChargeToken] = useState(
-    supportedTokens["0x036CbD53842c5426634e7929541eC2318f3dCF7e"]
-  );
+  const [chargeToken, setChargeToken] = useState(supportedTokens[defaultToken]);
   const [destinationChain, setDestinationChain] = useState(
-    supportedChains["base_sepolia"]
+    supportedChains[defaultChain.id]
   );
 
   const [TokenMenu, selectedToken] = useAppObjMenu({
@@ -54,8 +54,7 @@ const Transfer = () => {
     objecKey: "symbol",
     toggleCallback: (val) => setChargeToken(val),
     items: Object.values(supportedTokens),
-    defaultOption:
-      supportedTokens["0x036CbD53842c5426634e7929541eC2318f3dCF7e"],
+    defaultOption: supportedTokens[defaultToken],
   });
 
   const [ChainMenu, selectedChain] = useAppObjMenu({
@@ -63,7 +62,7 @@ const Transfer = () => {
     objecKey: "chain_name",
     menuClass: "chain-menu",
     items: Object.values(supportedChains),
-    defaultOption: supportedChains["base_sepolia"],
+    defaultOption: supportedChains[defaultChain.id],
     toggleCallback: (value) => setDestinationChain(value),
   });
 
@@ -132,8 +131,6 @@ const Transfer = () => {
           destinationChain.chain_id !== defaultChain.id
         );
 
-        console.log(hash);
-
         // SUCCESSFUL TRANSFER
         toast.success("Funds transferred successfully", {
           description: `Transaction hash: ${hash}`,
@@ -182,7 +179,9 @@ const Transfer = () => {
     }
   };
 
-  console.log(paymentData);
+  const onRamp = () => {
+    toast.message("Coming soon...");
+  };
 
   return (
     <div className="base-page transfer">
@@ -217,7 +216,32 @@ const Transfer = () => {
           </div>
         </div>
 
-        <div className="withdrawal-header">
+        <div
+          onClick={() => onRamp()}
+          className={`base-btn ${!loading ? "disabled" : ""}`}
+          style={{ width: "220px", alignSelf: "center", height: "45px" }}
+        >
+          <p>Fund from bank</p>
+
+          {!loading && (
+            <div className="base-btn__icon">
+              <EscalatorUp size={15} weight="bold" />
+            </div>
+          )}
+
+          {loading && (
+            <div className="c-spinner">
+              <ClipLoader
+                size={16}
+                color={"#fff"}
+                loading={loading}
+                aria-label="Loading Spinner"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="withdrawal-header" style={{ marginTop: "10px" }}>
           <p>Transfer</p>
         </div>
 

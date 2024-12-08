@@ -34,9 +34,9 @@ const config: HardhatUserConfig = {
           hardhat: {
             allowUnlimitedContractSize: true,
           },
-          eth: {
+          ethSepolia: {
             url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY!}`,
-            chainId: 1,
+            chainId: 11155111,
             accounts: [process.env.PRIVATE_KEY_1!],
           },
           baseSepolia: {

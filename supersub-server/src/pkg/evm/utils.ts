@@ -26,7 +26,7 @@ export const getAlchemyClient = (network: Network) => {
 const getTransportURL = (chainId: number) => {
   switch (chainId) {
     case baseSepolia.id:
-      return 'https://base-sepolia.g.alchemy.com/v2/GAG9zhOv7cSHQdF77ZD3L27aN4JGiwGm';
+      return `https://base-sepolia.g.alchemy.com/v2/${config.ALCHEMY_API_KEY}`;
     case optimismSepolia.id:
       return '';
     case fraxtalTestnet.id:
@@ -34,18 +34,18 @@ const getTransportURL = (chainId: number) => {
     case arbitrumSepolia.id:
       return '';
     case polygonAmoy.id:
-      return '';
+      return 'ttps://polygon-mumbai.g.alchemy.com/v2/${config.ALCHEMY_API_KEY}';
     case sepolia.id:
-      return '';
+      return `https://eth-sepolia.g.alchemy.com/v2/${config.ALCHEMY_API_KEY}`;
     default:
-      return 'https://base-sepolia.g.alchemy.com/v2/GAG9zhOv7cSHQdF77ZD3L27aN4JGiwGm';
+      return `https://eth-sepolia.g.alchemy.com/v2/${config.ALCHEMY_API_KEY}`;
   }
 };
 export const getEvmHttpClient = (chain: Chain) => {
   const transportURL = getTransportURL(chain.id);
   return createPublicClient({
     transport: http(transportURL),
-    chain,
+    chain: chain,
   });
 };
 

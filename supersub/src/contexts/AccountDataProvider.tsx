@@ -16,11 +16,12 @@ import {
   GetTokensForOwnerResponse,
   AssetTransfersWithMetadataResponse,
 } from "alchemy-sdk";
-import { defaultChain } from "utils/wagmi";
+import { defaultChain, defaultNetwork } from "utils/wagmi";
+import { ZeroAddress } from "ethers";
+import { supportedTokens } from "constants/data";
 
 export const alchemy = new Alchemy({
-  //@ts-ignore
-  network: defaultChain.network,
+  network: defaultNetwork,
   apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
 });
 
@@ -39,12 +40,11 @@ export default function AccountDataProvider(props: AccountDataProviderProps) {
   const [tokenPrices, setTokensBalances] = useState<ITokensBalances>({});
   const { data: rawEthBalance } = useBalance({
     address: smartAddress as `0x${string}`,
+    chainId: defaultChain.id,
     query: {
       enabled: queryEnabled,
     },
   });
-
-  // console.log(rawEthBalance);
 
   const ethBalance = formatUnits(
     rawEthBalance?.value! || 0n,
@@ -58,7 +58,17 @@ export default function AccountDataProvider(props: AccountDataProviderProps) {
     refetchOnWindowFocus: false,
     queryKey: ["acctTokens", smartAddress],
     queryFn: async () => {
-      return await alchemy.core.getTokensForOwner(smartAddress!);
+      const tokens = await alchemy.core.getTokensForOwner(smartAddress!);
+      const ethBalance = await alchemy.core.getBalance(smartAddress!);
+      tokens["tokens"].push({
+        contractAddress: ZeroAddress,
+        name: "Ethereum",
+        symbol: "ETH",
+        decimals: 18,
+        balance: formatUnits(ethBalance.toBigInt(), 18),
+        logo: supportedTokens[ZeroAddress].image_url,
+      });
+      return tokens;
     },
   });
 

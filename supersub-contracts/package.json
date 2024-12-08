@@ -9,7 +9,7 @@
     "coverage": "hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"test/**/*.ts\"",
     "lint": "solhint 'contracts/SubscriptionManager.sol' 'contracts/SubscriptionPlugin.sol'",
     "format": "prettier --write --plugin=prettier-plugin-solidity .",
-    "deploy": "npx hardhat run --network baseSepolia scripts/deploy.ts",
+    "deploy": "npx hardhat run --network ethSepolia scripts/deploy.ts",
     "dev": "npx ts-node scripts/main.ts",
     "export-abi": "hardhat export-abi",
     "build": "hardhat compile",

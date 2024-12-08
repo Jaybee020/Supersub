@@ -1,9 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
-import useUrlParams from "hooks/useUrlParams";
-import { generateSmartWallet } from "utils/WalletUtils";
 import { WalletClientSigner, SmartAccountClient } from "@aa-sdk/core";
+import { generateSmartWallet } from "utils/WalletUtils";
 import { MultiOwnerModularAccount } from "@account-kit/smart-contracts";
+import useUrlParams from "hooks/useURLParams";
 import {
   useState,
   useEffect,
@@ -21,22 +21,19 @@ import {
 
 // SUBSCRIPTION PLUGINS SETUP
 import PluginClient from "contracts/subscriptionPlugin";
-import {
-  ICreateProductArgs,
-  IRecurringPaymentArgs,
-  ISubscribeParams,
-} from "types/PluginMethods";
+import { ICreateProductArgs, IRecurringPaymentArgs } from "types/PluginMethods";
 
 export type Modals =
   | "payment"
   | "create-product"
   | "product-preview"
-  | "edit-product";
+  | "edit-product"
+  | "edit-plan"
+  | "edit-subscription";
 
 const AppProvider = ({ children }: AppProviderProps) => {
-  const params = useUrlParams();
-
   // MODAL STATE
+  const params = useUrlParams();
   const [modalStatus, setModalStatus] = useState(false);
   const [activeModal, setActiveModal] = useState<Modals>("create-product");
 
@@ -86,6 +83,11 @@ const AppProvider = ({ children }: AppProviderProps) => {
     setPluginClient(pluginClient);
     setSmartAccountClient(smartAccountClient);
     setIsSmartAccountReady(true);
+    //install plugin if it is not installed
+    const isPluginInstalled = await pluginClient.isPluginInstalled();
+    if (!isPluginInstalled) {
+      await pluginClient.installPlugin();
+    }
   };
 
   // IF EMBEDDED WALLET IS AVAILABLE,
@@ -204,13 +206,49 @@ const AppProvider = ({ children }: AppProviderProps) => {
     }
   };
 
-  const unsubscribe = async (planId: number) => {
+  const subscribeToPlan = async (
+    planId: number,
+    endTime: number,
+    paymentToken?: string,
+    beneficiary?: string,
+    paymentTokenSwapFee?: number
+  ) => {
     if (!pluginClient) return;
 
     try {
-      const subscription = await pluginClient.unSubscribe(planId);
+      const hash = await pluginClient.subscribe(
+        planId,
+        endTime,
+        paymentToken,
+        beneficiary,
+        paymentTokenSwapFee
+      );
 
-      console.log(subscription);
+      console.log("subscribe hash", hash);
+      toast.success("Successfully subscribed to plan");
+    } catch (error: any) {
+      toast.error(
+        "Failed to subscribe to plan" +
+          (error?.details
+            ? " with code " + JSON.parse(error?.details)?.code
+            : ""),
+        {
+          description: error?.details
+            ? JSON.parse(error?.details)?.message
+            : undefined,
+        }
+      );
+    }
+
+    // const { planId, endTime, paymentToken, beneficiary, paymentTokenSwapFee } =
+    //   susbscribeData;
+  };
+
+  const unsubscribeToPlan = async (planId: number, beneficiary: string) => {
+    if (!pluginClient) return;
+
+    try {
+      const subscription = await pluginClient.unSubscribe(planId, beneficiary);
 
       // CLOSE MODAL
       toast.success("Subscription cancelled successfully");
@@ -232,43 +270,40 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
   // CREATE RECURRING PAYMENT
   const createRecurringPayment = async (productData: IRecurringPaymentArgs) => {
-    if (!pluginClient) return;
+    try {
+      if (!pluginClient) return;
 
-    const {
-      initPlan,
-      endTime,
-      paymentToken,
-      paymentTokenSwapFee,
-      description,
-    } = productData;
+      const {
+        initPlan,
+        endTime,
+        paymentToken,
+        paymentTokenSwapFee,
+        description,
+      } = productData;
 
-    const hash = await pluginClient.createRecurringPayment(
-      //@ts-ignore
-      initPlan,
-      endTime,
-      paymentToken,
-      paymentTokenSwapFee,
-      description
-    );
+      const hash = await pluginClient.createRecurringPayment(
+        //@ts-ignore
+        initPlan,
+        endTime,
+        paymentToken,
+        paymentTokenSwapFee,
+        description
+      );
 
-    return hash;
-  };
-
-  //SUBSCRIBE TO PLAN
-  const subscribe = async (susbscribeData: ISubscribeParams) => {
-    if (!pluginClient) return;
-
-    const { planId, endTime, paymentToken, beneficiary, paymentTokenSwapFee } =
-      susbscribeData;
-    const hash = await pluginClient.subscribe(
-      planId,
-      endTime,
-      paymentToken,
-      beneficiary,
-      paymentTokenSwapFee
-    );
-
-    toast.success("Product updated successfully");
+      return hash;
+    } catch (error: any) {
+      toast.error(
+        `Failed to create recurring payment` +
+          (error?.details
+            ? " with error code " + JSON.parse(error?.details)?.code
+            : ""),
+        {
+          description: error?.details
+            ? JSON.parse(error?.details)?.message
+            : undefined,
+        }
+      );
+    }
   };
 
   // TRANSFER FUNDS
@@ -301,25 +336,98 @@ const AppProvider = ({ children }: AppProviderProps) => {
     }
   };
 
+  const updatePlan = async (
+    planId: number,
+    recipient: `0x${string}`,
+    destinationChain: number,
+    isActive: boolean
+  ) => {
+    if (!pluginClient) return;
+
+    try {
+      const hash = await pluginClient.updatePlan(
+        planId,
+        recipient,
+        destinationChain,
+        isActive
+      );
+
+      // return hash;
+    } catch (error: any) {
+      toast.error(
+        `Failed to update plan` +
+          (error?.details
+            ? " with error code " + JSON.parse(error?.details)?.code
+            : ""),
+        {
+          description: error?.details
+            ? JSON.parse(error?.details)?.message
+            : undefined,
+        }
+      );
+    }
+  };
+
+  const updateSubscription = async (
+    planId: number,
+    beneficiary: `0x${string}`,
+    paymentTokenAddress: `0x${string}`,
+    endTime: number,
+    paymentTokenSwapFee?: number
+  ) => {
+    if (!pluginClient) return;
+
+    try {
+      const hash = await pluginClient.changeSubscriptionPlanPaymentInfo(
+        planId,
+        endTime,
+        paymentTokenAddress,
+        beneficiary,
+        paymentTokenSwapFee
+      );
+
+      // return hash;
+    } catch (error: any) {
+      toast.error(
+        `Failed to update subscription` +
+          (error?.details
+            ? " with error code " + JSON.parse(error?.details)?.code
+            : ""),
+        {
+          description: error?.details
+            ? JSON.parse(error?.details)?.message
+            : undefined,
+        }
+      );
+    }
+  };
+
+  const uninstallPlugin = async () => {
+    if (pluginClient) {
+      const hash = await pluginClient.uninstallPlugin();
+      return hash;
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
-        params,
-
         ready,
         isMfaEnabled,
         authenticated,
         isSmartAccountReady,
         smartAddress: smartAccount?.address,
-
+        params,
         login: userLogin,
-
-        unsubscribe,
+        updatePlan,
+        updateSubscription,
+        subscribeToPlan,
+        uninstallPlugin,
+        unsubscribeToPlan,
         transferFunds,
         createProduct,
         updateProduct,
         createRecurringPayment,
-        subscribe,
 
         // MODAL STATE
         modalStatus,
@@ -340,18 +448,24 @@ interface AppProviderProps {
 }
 
 interface AppContextType {
-  params: Record<string, string>;
-
   // user: User | null;
   ready: boolean;
   isMfaEnabled: boolean;
   authenticated: boolean;
   isSmartAccountReady: boolean;
   smartAddress: string | undefined;
-
+  params: Record<string, string>;
   login: () => void;
 
-  unsubscribe: (planId: number) => Promise<void>;
+  unsubscribeToPlan: (planId: number, beneficiary: string) => Promise<void>;
+  uninstallPlugin: () => Promise<void>;
+  subscribeToPlan: (
+    planId: number,
+    endTime: number,
+    paymentToken?: string,
+    beneficiary?: string,
+    paymentTokenSwapFee?: number
+  ) => Promise<void>;
   transferFunds: (
     value: number,
     tokenAddr: string,
@@ -365,8 +479,20 @@ interface AppContextType {
     destinationChain: number,
     isActive: boolean
   ) => Promise<void>;
+  updatePlan: (
+    planId: number,
+    recipient: `0x${string}`,
+    destinationChain: number,
+    isActive: boolean
+  ) => Promise<void>;
+  updateSubscription: (
+    planId: number,
+    beneficiary: `0x${string}`,
+    paymentTokenAddress: `0x${string}`,
+    endTime: number,
+    paymentTokenSwapFee?: number
+  ) => Promise<void>;
   createProduct: (productData: ICreateProductArgs) => Promise<void>;
-  subscribe: (subscribeData: ISubscribeParams) => Promise<void>;
   createRecurringPayment: (
     productData: IRecurringPaymentArgs
   ) => Promise<string | undefined>;

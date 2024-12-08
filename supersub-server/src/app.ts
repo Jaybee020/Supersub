@@ -142,12 +142,19 @@ application.get('/api/transactions', async (req: Request, res: Response<SuccessR
   const skip = parseInt(offset as string);
   const take = parseInt(limit as string);
   const transactions = await prisma.transaction.findMany({
-    include: { subscription: true, token: true },
+    include: { subscription: { include: { plan: { include: { token: true } }, product: true } }, token: true },
+    orderBy: { id: 'desc' },
     where: where,
     take: take,
     skip: skip,
   });
-  return successResponse(res, { transactions }, StatusCodes.OK);
+  return successResponse(
+    res,
+    {
+      transactions,
+    },
+    StatusCodes.OK,
+  );
 });
 
 application.get('/api/subscriptions', async (req: Request, res: Response<SuccessResponse>) => {
@@ -180,7 +187,7 @@ application.get('/api/products', async (req: Request, res: Response<SuccessRespo
   const address = req.query.address as string;
   const chainId = Number(req.query.chainId);
   const products = await prisma.product.findMany({
-    include: { _count: { select: { subscriptions: true } }, plans: true },
+    include: { _count: { select: { subscriptions: true } }, plans: { include: { token: true } } },
     where: { creatorAddress: address, chainId },
   });
 
@@ -190,8 +197,11 @@ application.get('/api/products', async (req: Request, res: Response<SuccessRespo
 application.get('/api/products/:reference', async (req: Request, res: Response<SuccessResponse>) => {
   const address = req.query.address as string;
   const product = await prisma.product.findUnique({
+    include: {
+      plans: { include: { token: true }, orderBy: { id: 'asc' } },
+      _count: { select: { subscriptions: true } },
+    },
     where: { onchainReference: req.params.reference, creatorAddress: address },
-    include: { _count: { select: { subscriptions: true } }, plans: true },
   });
 
   return successResponse(res, { product }, StatusCodes.OK);
@@ -204,6 +214,50 @@ application.get('/api/plan/:reference', async (req: Request, res: Response<Succe
   });
 
   return successResponse(res, { plan }, StatusCodes.OK);
+});
+
+application.get('/api/transaction/:reference', async (req: Request, res: Response<SuccessResponse>) => {
+  const transaction = await prisma.transaction.findFirst({
+    include: { subscription: { include: { plan: { include: { token: true } }, product: true } }, token: true },
+    where: { onchainReference: req.params.reference },
+  });
+
+  return successResponse(res, { transaction }, StatusCodes.OK);
+});
+
+application.put('/api/email/:address', async (req: Request, res: Response<SuccessResponse>) => {
+  const smartAccountAddress = req.params.address as string;
+  const email = req.body.email as string;
+  //check if account with smart Account address exists, if it does, update email, if it doesn't, create account with email
+  const account = await prisma.account.findUnique({
+    where: { smartAccountAddress: smartAccountAddress },
+    select: { emailAddress: true },
+  });
+
+  if (account) {
+    await prisma.account.update({
+      where: { smartAccountAddress: smartAccountAddress },
+      data: { emailAddress: email },
+    });
+  } else {
+    await prisma.account.create({
+      data: {
+        smartAccountAddress: smartAccountAddress,
+        emailAddress: email,
+      },
+    });
+  }
+
+  return successResponse(res, { email }, StatusCodes.OK);
+});
+
+application.get('/api/email/:address', async (req: Request, res: Response<SuccessResponse>) => {
+  const address = req.params.address as string;
+  const email = await prisma.account.findUnique({
+    where: { smartAccountAddress: address },
+    select: { emailAddress: true },
+  });
+  return successResponse(res, { email: email?.emailAddress }, StatusCodes.OK);
 });
 
 application.post('/_webhook', alchemyWebhookMiddleware, async (req: Request, res: Response<SuccessResponse>) => {

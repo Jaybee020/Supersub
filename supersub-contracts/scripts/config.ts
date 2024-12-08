@@ -13,6 +13,7 @@ import {
   sepolia,
 } from '@alchemy/aa-core';
 import { parseUnits, ZeroAddress } from 'ethers';
+import { erc20 } from '../typechain-types/@openzeppelin/contracts/token';
 
 export function getDeploymentAddressesByChain(name: string) {
   const dict = {
@@ -45,7 +46,7 @@ const avalancheFuji = 43113;
 export const deploymentVariablesDict = {
   testnet: {
     eth: {
-      supportedTokens: [],
+      supportedTokens: ['0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238'],
       chainId: sepolia.id,
       swapRouterAddr: '0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E',
       swapFactoryAddr: '0x0227628f3F023bb0B980b67D528571c95c6DaC1c',
@@ -59,8 +60,10 @@ export const deploymentVariablesDict = {
         CCIPChainSelector.avaxFuji,
       ],
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
-      tokenBridge: '',
+      tokenBridge: '0x503Ec91A177CA57031580dAeb098430d6bF8Fb03',
       WETH: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
+      erc20FeeProxy: '0x399F5EE127ce7432E4921a61b8CF52b0af52cbfE',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     base: {
       supportedTokens: ['0x036CbD53842c5426634e7929541eC2318f3dCF7e'],
@@ -79,6 +82,8 @@ export const deploymentVariablesDict = {
       link: '0xE4aB69C077896252FAFBD49EFD26B5D171A32410',
       tokenBridge: '0x016e3Ea032Ef8E649b448D1237C62760103F5Feb',
       WETH: '0x4200000000000000000000000000000000000006',
+      erc20FeeProxy: '0x399f5ee127ce7432e4921a61b8cf52b0af52cbfe',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     polygon: {
       supportedTokens: ['0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582'], //tokens for bridging
@@ -96,6 +101,8 @@ export const deploymentVariablesDict = {
       link: '0x0Fd9e8d3aF1aaee056EB9e802c3A762a667b1904',
       tokenBridge: '',
       WETH: '0x360ad4f9a9A8EFe9A8DCB5f461c4Cc1047E1Dcf9',
+      erc20FeeProxy: '0x399f5ee127ce7432e4921a61b8cf52b0af52cbfe',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     fraxtal: {
       supportedTokens: [],
@@ -108,6 +115,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: ZeroAddress,
       WETH: '0xfc00000000000000000000000000000000000006',
+      erc20FeeProxy: '0x399f5ee127ce7432e4921a61b8cf52b0af52cbfe',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     optimism: {
       supportedTokens: [],
@@ -126,6 +135,8 @@ export const deploymentVariablesDict = {
       link: '0xE4aB69C077896252FAFBD49EFD26B5D171A32410',
       tokenBridge: '',
       WETH: '0x4200000000000000000000000000000000000006',
+      erc20FeeProxy: '0x399f5ee127ce7432e4921a61b8cf52b0af52cbfe',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     arbitrum: {
       supportedTokens: [],
@@ -144,6 +155,8 @@ export const deploymentVariablesDict = {
       link: '0xb1D4538B4571d411F07960EF2838Ce337FE1E80E',
       tokenBridge: '',
       WETH: '0x980B62Da83eFf3D4576C647993b0c1D7faf17c73',
+      erc20FeeProxy: '0x399f5ee127ce7432e4921a61b8cf52b0af52cbfe',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
   },
 
@@ -165,6 +178,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: '',
       WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      erc20FeeProxy: '0x1892196E80C4c17ea5100Da765Ab48c1fE2Fb814',
+      ethFeeProxy: '0xd9C3889eB8DA6ce449bfFE3cd194d08A436e96f2',
     },
     base: {
       supportedTokens: [],
@@ -183,6 +198,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: '',
       WETH: '',
+      erc20FeeProxy: '0x370DE27fdb7D1Ff1e1BaA7D11c5820a324Cf623C',
+      ethFeeProxy: '0xfCFBcfc4f5A421089e3Df45455F7f4985FE2D6a8',
     },
     polygon: {
       supportedTokens: [],
@@ -201,6 +218,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: '',
       WETH: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+      erc20FeeProxy: '0x0DfbEe143b42B41eFC5A6F87bFD1fFC78c2f0aC9',
+      ethFeeProxy: '0xfCFBcfc4f5A421089e3Df45455F7f4985FE2D6a8',
     },
     fraxtal: {
       supportedTokens: [],
@@ -237,6 +256,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: '',
       WETH: '',
+      erc20FeeProxy: '0x399F5EE127ce7432E4921a61b8CF52b0af52cbfE',
+      ethFeeProxy: '0xe11BF2fDA23bF0A98365e1A4c04A87C9339e8687',
     },
     arbitrum: {
       supportedTokens: [],
@@ -255,6 +276,8 @@ export const deploymentVariablesDict = {
       link: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
       tokenBridge: '',
       WETH: '',
+      erc20FeeProxy: '0x0DfbEe143b42B41eFC5A6F87bFD1fFC78c2f0aC9',
+      ethFeeProxy: '0xfCFBcfc4f5A421089e3Df45455F7f4985FE2D6a8',
     },
   },
 };

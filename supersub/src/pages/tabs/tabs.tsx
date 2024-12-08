@@ -9,11 +9,27 @@ import {
   FingerprintSimple,
   ContactlessPayment,
 } from "@phosphor-icons/react";
+import { supportedChains } from "constants/data";
+import { defaultChain } from "utils/wagmi";
+import { useEffect, useState } from "react";
 
 const Tabs = () => {
   const { openModal } = useModal();
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="tabs">
@@ -29,10 +45,7 @@ const Tabs = () => {
           })}
 
           <div className="version">
-            <img
-              src="https://moonpay-marketing-c337344.payloadcms.app/media/base%20logo.webp"
-              alt=""
-            />
+            <img src={supportedChains[defaultChain.id].image_url} alt="" />
           </div>
 
           <div className="indicator" />
@@ -98,7 +111,12 @@ const Tabs = () => {
               className="tabs-navigation__item"
             >
               {item.icon}
-              <p>{item.label}</p>
+
+              {windowWidth >= 600 && (
+                <>
+                  <p>{item.label}</p>
+                </>
+              )}
             </NavLink>
           );
         })}

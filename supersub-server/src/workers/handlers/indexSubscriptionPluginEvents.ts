@@ -11,8 +11,11 @@ import {
 } from '~/pkg/evm';
 import { getDeploymentVarsByChain } from '~/pkg/evm/constants';
 import { logger } from '~/pkg/logging';
+import { resend } from '~/pkg/resend';
 import { getRanges } from '~/utils';
 import { prisma } from '~/pkg/db';
+
+import { getChargeNotificationBodyTemplate } from './emailNotification';
 
 export const indexSubscriptionPluginEvents = async (chain: Chain) => {
   try {
@@ -281,6 +284,7 @@ const handleSubscriptionCharged = async (
         subscriptionOnchainReference: `${chain.id}:${event.args.planId}:${event.args.beneficiary}`,
         tokenOnchainReference: `${chain.id}:${event.args.paymentToken}`,
         onchainReference: `${chain.id}:${event.transactionHash}`,
+        requestReference: event.args.paymentReference,
         amount: event.args.paymentAmount.toString(),
         sender: subscription?.subscriberAddress,
         tokenAddress: event.args.paymentToken,
@@ -302,6 +306,7 @@ const handleSubscriptionCharged = async (
         onchainReference: `${chain.id}:${event.transactionHash}`,
         tokenAddress: subscription?.plan.tokenAddress as string,
         amount: subscription?.plan.price.toString() || '',
+        requestReference: event.args.paymentReference,
         sender: subscription?.subscriberAddress,
         status: 'SUCCESS',
         chainId: chain.id,
@@ -314,4 +319,26 @@ const handleSubscriptionCharged = async (
     where: { onchainReference: `${chain.id}:${event.args.planId}:${event.args.beneficiary}` },
     data: { lastChargeDate: solidityTimestampToDateTime(event.args.timestamp) },
   });
+
+  //check if account with smart Account address exists, if it does, send email,if it doesn't, do nothing
+  const subscriber = await prisma.account.findUnique({
+    where: { smartAccountAddress: subscription?.subscriberAddress },
+    select: { emailAddress: true },
+  });
+
+  if (subscriber && subscriber.emailAddress) {
+    const chargeNotificationBody = getChargeNotificationBodyTemplate({
+      url: `https://supersub.com/subscription/${subscription.id}`,
+      email: subscriber.emailAddress,
+      chargeStatus: true,
+    });
+    await resend.batch.send([
+      {
+        subject: 'SuperSub - Subscription Charged',
+        from: 'SuperSub <onboarding@resend.dev>',
+        to: [subscriber.emailAddress],
+        text: chargeNotificationBody,
+      },
+    ]);
+  }
 };

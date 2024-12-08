@@ -35,11 +35,11 @@ const ApiKey = ({ itemKey, itemValue }: ApiKeyProps) => {
               <EyeClosed size={18} weight="light" />
             )}
           </div>
-
+          {/* 
           <div className="details-block--info">
             <p className="sub no-transform">{itemKey}</p>
             <p className="main">{show ? itemValue : "*********************"}</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="copy-btn">

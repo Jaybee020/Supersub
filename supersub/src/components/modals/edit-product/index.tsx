@@ -36,8 +36,6 @@ const EditProductModal = () => {
   const { updateProduct } = useApp();
   const { activeProduct } = useModal();
 
-  console.log(activeProduct);
-
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState("");
 
@@ -66,7 +64,7 @@ const EditProductModal = () => {
 
   const updateData = useMemo(() => {
     return {
-      productId: activeProduct?.onchainReference,
+      productId: activeProduct?.onchainReference.split(":")[1],
       recipient: isAddress(destination)
         ? destination
         : activeProduct?.receivingAddress,
@@ -102,6 +100,7 @@ const EditProductModal = () => {
         updateData.destinationChain,
         updateData.isActive
       );
+      toast.success("Product updated successfully");
     } catch (error: any) {
       toast.error(
         `Failed to update product` +
@@ -144,7 +143,7 @@ const EditProductModal = () => {
 
       <div className="base-modal__body">
         {/* CHAIN DESTINATION ADDRESS */}
-        <div className="base-input">
+        {/* <div className="base-input">
           <WalletIcon size={24} address={destination || "0x"} />
 
           <div className="base-input__block padded">
@@ -162,10 +161,10 @@ const EditProductModal = () => {
               Current: {activeProduct?.receivingAddress}
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* CHANGE CHAIN */}
-        <div className="row">
+        {/* <div className="row">
           <div className="row-block medium">
             <p>Current chain:</p>
             <div className="icon">
@@ -224,7 +223,7 @@ const EditProductModal = () => {
               </div>
             </ChainMenu>
           </div>
-        </div>
+        </div> */}
 
         {/* TOGGLE PRODUCT */}
         <div className="row" style={{ marginTop: "4px" }}>

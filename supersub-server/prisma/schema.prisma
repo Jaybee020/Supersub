@@ -17,17 +17,12 @@ datasource db {
 // Accounts
 model Account {
   id                  Int    @id @default(autoincrement())
-  eoaAddress          String @unique
-  emailAddress        String @unique
+  emailAddress        String 
   smartAccountAddress String @unique
-  metadata            Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  apiKey                  ApiKey?
-
-  @@index([smartAccountAddress], type: Hash)
 }
 
 // Product Types
@@ -109,6 +104,7 @@ model Transaction {
   onchainReference String            
   chainId          Int
   status           TransactionStatus
+  requestReference String?
 
   tokenAddress String
   tokenOnchainReference String
@@ -172,18 +168,7 @@ model Token {
   subscriptions Subscription[]
 }
 
-// API Keys
-model ApiKey {
-  id        Int    @id @default(autoincrement())
-  publicKey String @unique
-  secretKey String @unique
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  accountAddress String  @unique
-  account        Account @relation(fields: [accountAddress], references: [smartAccountAddress])
-}
 
 // Cache
 model Cache {

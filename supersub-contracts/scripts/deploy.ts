@@ -6,7 +6,7 @@ type Chain = 'eth' | 'base' | 'polygon' | 'arbitrum' | 'optimism';
 
 async function deploySubscriptionManager(network: Network, chain: Chain) {
   const deploymentVars = deploymentVariablesDict[network][chain];
-  let tokenBridgeAddr = '';
+  let tokenBridgeAddr = deploymentVars.tokenBridge;
 
   console.log(deploymentVars.ccipChainSelector);
   if (!tokenBridgeAddr || tokenBridgeAddr.length == 0) {
@@ -28,6 +28,8 @@ async function deploySubscriptionManager(network: Network, chain: Chain) {
     deploymentVars.swapRouterAddr,
     deploymentVars.WETH,
     tokenBridgeAddr,
+    deploymentVars.ethFeeProxy,
+    deploymentVars.erc20FeeProxy,
   ]);
 
   await subscriptionManger.waitForDeployment();
@@ -36,5 +38,4 @@ async function deploySubscriptionManager(network: Network, chain: Chain) {
 
 async function deployCCIP(network: Network, chain: Chain) {}
 
-// deploy("testnet", "zkEVM").catch((error) => console.log(error));
-deploySubscriptionManager('testnet', 'base').catch((error) => console.log(error));
+deploySubscriptionManager('testnet', 'eth').catch((error) => console.log(error));
