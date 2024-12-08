@@ -73,7 +73,7 @@ The smart accounts have the ability to automatically processes a payment request
 
 #### 2. Subscription Plugin
 
-Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention. Our plugin was deployed on the sepolia network at 0xC3Ee675b5bb22284f10343cb0686d55Db607fc33
+Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention. Our plugin was deployed on the sepolia network at 0xC3Ee675b5bb22284f10343cb0686d55Db607fc33.
 
 #### 3. Token Bridge
 
