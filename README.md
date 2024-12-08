@@ -73,7 +73,7 @@ The smart accounts have the ability to automatically processes a payment request
 
 #### 2. Subscription Plugin
 
-Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention.
+Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention. Our plugin was deployed on the sepolia network at 0xC3Ee675b5bb22284f10343cb0686d55Db607fc33
 
 #### 3. Token Bridge
 
@@ -146,9 +146,11 @@ Here are a few ways you can get involved:
 
 <sup>[(Back to top)](#------------------------)</sup>
 
-<!-- Meet the creative minds who brought this project to life:
-
-| **Name**        | **Role**                                 | **GitHub**                             |
-| --------------- | ---------------------------------------- | -------------------------------------- |
-| Olayinka Ganiyu | Smart Contract & Backend Engineer (LxLy) | [GitHub](https://github.com/Jaybee020) |
-| Kester Atakere  | Designer & Frontend Engineer             | [GitHub](https://github.com/codergon)  | -->
+| **Name**          | **Role**                     | **GitHub**                                    |
+| ----------------- | ---------------------------- | --------------------------------------------- |
+| Olayinka Ganiyu   | Smart Contract Engineer      | [GitHub](https://github.com/Jaybee020)        |
+| Tobiloba Emmanuel | Smart Contract Engineer      | [GitHub](https://github.com/Tee-py)           |
+| Mofeoluwa Lijadu  | Backend Engineer             | [Github](https://github.com/scmofeoluwa)      |
+| Isaac Adewumi     | Backend Engineer             | [GitHub](https://github.com/prettyirrelevant) |
+| Kester Atakere    | Designer & Frontend Engineer | [GitHub](https://github.com/codergon)         |
+| Oreoluwa Adeleye  | Frontend Engineer            | [Github](https://github.com/Pauleye12)        |
