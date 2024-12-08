@@ -132,7 +132,14 @@ const EditSubscriptionModal = () => {
     <div className="base-modal edit-product">
       <div className="c-img-input">
         <div className="c-img-input__preview sm">
-          <img alt="preview" src={activeSubscription.product?.logoUrl} />
+          {activeSubscription.product.type === "SUBSCRIPTION" ? (
+            <img alt="preview" src={activeSubscription.product?.logoUrl} />
+          ) : (
+            <WalletIcon
+              address={activeSubscription.plan.receivingAddress}
+              size={28}
+            />
+          )}
         </div>
       </div>
 
@@ -149,42 +156,55 @@ const EditSubscriptionModal = () => {
         </div>
       </div>
 
-      <div className="base-modal__body" style={{ flexDirection: "row" }}>
-        <div
-          className="row-block animated"
-          style={{ background: "none", border: "none" }}
-        >
-          {/* DATE SELECTOR */}
-          <TokenMenu>
-            <div
-              className="r-block"
-              style={{
-                cursor: "pointer",
-              }}
-            >
-              <div className="base-input--icon">
-                <img alt="" src={selectedToken?.image_url} />
-              </div>
-
-              <p
+      <div className="base-modal__body" style={{ display: "block" }}>
+        <div className="base-input__block">
+          <div
+            className="row-block animated"
+            style={{ background: "none", border: "none" }}
+          >
+            <p>Payment Token:</p>
+            {/* DATE SELECTOR */}
+            <TokenMenu>
+              <div
+                className="r-block"
                 style={{
-                  fontSize: "14px",
-                  textTransform: "uppercase",
+                  cursor: "pointer",
                 }}
               >
-                {selectedToken?.symbol}
-              </p>
+                <div className="base-input--icon">
+                  <img alt="" src={selectedToken?.image_url} />
+                </div>
 
-              <CaretDown
-                size={16}
-                weight="bold"
-                style={{
-                  marginTop: "-2px",
-                }}
-              />
-            </div>
-          </TokenMenu>
-          <DateSelector date={selectedDate} setDate={setSelectedDate} />
+                <p
+                  style={{
+                    fontSize: "14px",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {selectedToken?.symbol}
+                </p>
+
+                <CaretDown
+                  size={16}
+                  weight="bold"
+                  style={{
+                    marginTop: "-2px",
+                  }}
+                />
+              </div>
+            </TokenMenu>
+          </div>
+        </div>
+
+        <div className="base-input__block">
+          <div
+            className="row-block animated"
+            style={{ background: "none", border: "none" }}
+          >
+            {/* DATE SELECTOR */}
+            <p>Subscription Expiry:</p>
+            <DateSelector date={selectedDate} setDate={setSelectedDate} />
+          </div>
         </div>
       </div>
 

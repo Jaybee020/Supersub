@@ -34,10 +34,6 @@ const Settings = () => {
         .then((res) =>
           res.data.data.email ? setDestination(res.data.data.email) : "No Email"
         );
-      // return {
-      //   privateKey: "Jubril",
-      //   publicKey: "Jubril",
-      // } as any;
     },
   });
 

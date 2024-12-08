@@ -328,7 +328,9 @@ const handleSubscriptionCharged = async (
 
   if (subscriber && subscriber.emailAddress) {
     const chargeNotificationBody = getChargeNotificationBodyTemplate({
-      url: `https://supersub.com/subscription/${subscription.id}`,
+      url:
+        `https://charming-crepe-e8a4a4.netlify.app/transaction?reference=${chain.id}:${event.transactionHash}` ||
+        `https://supersub.com/subscription/${subscription.id}`,
       email: subscriber.emailAddress,
       chargeStatus: true,
     });

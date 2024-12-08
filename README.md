@@ -1,7 +1,7 @@
 <h1 align="center">
     <br>
     <a href="https://supersub.vercel.app">
-        <img src="./.github/supersub.png" alt="Supersub logo" />
+    <p>Supersub</p>
     </a>
     <br>
 </h1>
@@ -29,7 +29,7 @@
 
 Supersub is an innovative, decentralized platform that facilitates seamless periodic(recurring) payments on-chain. Our protocol eliminates the need for trust and centralized control, ensuring that all subscriptions are secure, permanent and borderless.
 
-At Supersub, we automatically process recurring payments for a fee, ensuring a smooth user experience while generating revenue for our platform. We also allow public participation in payment processing, enabling individuals and external providers to process payments and earn rewards for their contributions. Enjoy the freedom and efficiency of managing your subscription payments on the blockchain with Superb.
+At Supersub, we automatically process recurring payments for a fee, ensuring a smooth user experience while generating revenue for our platform. We also allow public participation in payment processing, enabling individuals and external providers to process payments and earn rewards for their contributions. Enjoy the freedom and efficiency of managing your subscription payments on the blockchain with Supersub.
 
 ## 🎥 Demo
 
@@ -80,6 +80,10 @@ Supersub implements a token bridge that enables seamless transfers of supported 
 #### 4. Affordable Transaction Fees
 
 Due to Base's low gast cost, we are able to come up with a reasonable fee structure by capping the maximum percenatage used as the fee to a value of 7.5%. Lower values would be used as long as the fee percentage covers the gas cost of the charge transaction.
+
+#### 5.Request Network
+
+Due to our transactions being processed by the request network, we are able to efficiently invoice our processed periodic payments to our subscribers. This enables us to generate valuable insights and data that can be used to improve our platform and services.
 
 ### Upcoming Enhancements
 
