@@ -27,6 +27,8 @@
 
 ## 🎯 Introduction
 
+A decentralized application that allows businesses to manage subscription-based services through the Request Network. It automates billing, invoicing, and payments, providing a seamless experience for both service providers and subscribers.
+
 Supersub is an innovative, decentralized platform that facilitates seamless periodic(recurring) payments on-chain. Our protocol eliminates the need for trust and centralized control, ensuring that all subscriptions are secure, permanent and borderless.
 
 At Supersub, we automatically process recurring payments for a fee, ensuring a smooth user experience while generating revenue for our platform. We also allow public participation in payment processing, enabling individuals and external providers to process payments and earn rewards for their contributions. Enjoy the freedom and efficiency of managing your subscription payments on the blockchain with Supersub.
@@ -59,7 +61,10 @@ Key features of Supersub include:
 - **Continuous Automation of Payments**: Our model ensures that payments are processed automatically, reducing the need for manual intervention and enhancing user experience. It also allows for token swaps and conversions, making it a versatile platform for a wide range of subscription services.
 - **Transparency and Control**: With every transaction recorded on the blockchain, subscribers and service providers gain unprecedented transparency and control over their subscription agreements.
 - **Cost-Effective**: By removing intermediaries and using blockchain technology, Supersub offers a cost-effective solution for managing subscription payments.
+- **Notification System**: Supersub provides a notification system that allows subscribers to receive notifications for due payments request, making it easier for users to manage their finances on the go.
 - **Automatic analytics**: By integrating the Request Network, Supersub provides invoices and analytics for processed payments, enabling businesses to track their subscription revenue and make informed decisions.
+- **Fiat On & Off-Ramp**: Supersub plans to implement a feature that will allow users to easily convert between digital assets and fiat currencies.
+- **Invoice Managments**: Supersub generates invoices for subscribers and providers.Since every invoice has a request id, these invoices are backed by the Request Network, ensuring that payments are processed automatically and transparently. See an example here [https://supersub.netlify.app/transaction?reference=11155111:0x28378e0503ab0ee4fd4f566e23290d8da556dd70644761624a16944844d38c93](https://supersub.netlify.app/transaction?reference=11155111:0x28378e0503ab0ee4fd4f566e23290d8da556dd70644761624a16944844d38c93)
 
 In this way, Supersub not only addresses the issues of centralization and censorship but also empowers businesses with seamless subscription management while offering subscribers more control and flexibility over their payments. Join us in shaping the future of digital subscriptions.
 
@@ -73,7 +78,7 @@ The smart accounts have the ability to automatically processes a payment request
 
 #### 2. Subscription Plugin
 
-Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention. Our plugin was deployed on the sepolia network at 0xC3Ee675b5bb22284f10343cb0686d55Db607fc33
+Our platform is powered by a specialized subscription plugin that empowers these smart contract wallets to automate recurring payments. This functionality ensures that transactions are executed reliably and securely without manual intervention. Our plugin was deployed on the sepolia network at 0xC3Ee675b5bb22284f10343cb0686d55Db607fc33.
 
 #### 3. Token Bridge
 
@@ -85,17 +90,17 @@ Due to low gast cost, we are able to come up with a reasonable fee structure by 
 
 #### 5.Request Network
 
-Due to our transactions being processed by the request network, we are able to efficiently invoice our processed periodic payments to our subscribers. This enables us to generate valuable insights and data that can be used to improve our platform and services.
+Thanks to the Request Network processing our transactions, we can efficiently invoice our subscribers for periodic payments. This capability allows us to gather valuable insights and data, which can be used to enhance our platform and services.
 
 ### Upcoming Enhancements
 
 We're committed to continuous improvement. Here's what's in the pipeline:
 
-- **Supersub SDK:** We're working on a Supersub SDK to simplify the integration process and enhance the developer experience.
+- **Supersub SDK:** We're working to improve tje Supersub SDK to simplify the integration process and enhance the developer experience via building widgets and dashboards.
 
 - **Fiat On & Off-Ramp:** We plan to introduce a feature that will allow you to easily convert between digital assets and fiat currency.
 
-- **Integrate Request:** We plan to intergrate the Request Network for other payment options like swap to pay an crosschain payments in the future. We would also love to work and integrate suitable on and off-ramp services for fiat currencies.
+- **Integrate Request:** We plan to intergrate the Request Network for features like automatic invoicing, payment options like swap to pay an crosschain payments in the future. We would also love to work and integrate suitable on and off-ramp services for fiat currencies using the Request Network. We also plan to implement a dashboard for proper analytics of request subscription data and a subscription/payment widget for easy integration.
 
 Stay tuned for these exciting enhancements!
 
