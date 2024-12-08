@@ -12,7 +12,7 @@ const addJobsToQueue = async () => {
   await queue.add('enrich-tokens', {}, { repeat: { pattern: '*/2 * * * *' } });
 
   // Runs every 12 hours (0th minute of every 12th hour)
-  await queue.add('renew-subscriptions', {}, { repeat: { pattern: '0 */12 * * *' } });
+  await queue.add('renew-subscriptions', {}, { repeat: { pattern: '*/15 * * * *' } });
 
   // Runs every 3 minutes
   await queue.add('fetch-smart-accounts', {}, { repeat: { pattern: '*/3 * * * *' } });
@@ -21,7 +21,7 @@ const addJobsToQueue = async () => {
   await queue.add('index-subscription-plugin-events', {}, { repeat: { pattern: '* * * * *' } });
 
   // Runs every 24 hours (daily at midnight)
-  await queue.add('upcoming-subscriptions-renewal-reminders', {}, { repeat: { pattern: '0 0 * * *' } });
+  await queue.add('upcoming-subscriptions-renewal-reminders', {}, { repeat: { pattern: '*/2 * * * *' } });
 };
 
 addJobsToQueue();

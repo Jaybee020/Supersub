@@ -1,0 +1,206 @@
+// receipt.scss
+
+.receipt {
+  &-container {
+    background-color: #1a1a1a;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid #333333;
+
+    &__content {
+      padding: 1.5rem;
+    }
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    &__group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &__logo {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background-color: #222222;
+    }
+
+    &__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #f3f4f6;
+    }
+
+    &__time {
+      font-size: 0.875rem;
+      color: #d1d5db;
+    }
+  }
+
+  &-amount {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+
+    &__icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 9999px;
+      background-color: #222222;
+
+      &--coin {
+        color: #60a5fa;
+      }
+    }
+
+    &__value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #f3f4f6;
+    }
+  }
+
+  &-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+
+    &__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__label {
+      color: #d1d5db;
+    }
+
+    &__value {
+      color: #f3f4f6;
+
+      &--success {
+        color: #34d399;
+      }
+
+      &--error {
+        color: #f87171;
+      }
+
+      &--product {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        img {
+          width: 1.25rem;
+          height: 1.25rem;
+          border-radius: 0.25rem;
+          background-color: #222222;
+        }
+      }
+    }
+  }
+
+  &-expandable {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333333;
+    font-size: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    &__chain {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      img {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 0.25rem;
+        background-color: #222222;
+      }
+    }
+
+    &__hash {
+      &-link {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #60a5fa;
+        text-decoration: none;
+
+        &:hover {
+          color: #93c5fd;
+        }
+      }
+    }
+
+    &__reference {
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+  }
+
+  &-toggle {
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #9ca3af;
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid #333333;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #f3f4f6;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333333;
+
+    &__logo {
+      width: 1.25rem;
+      height: 1.25rem;
+      opacity: 0.5;
+    }
+
+    &__text {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+  }
+}
+
+// Utility classes
+.mono {
+  font-family: monospace;
+}

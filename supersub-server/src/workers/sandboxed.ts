@@ -1,4 +1,4 @@
-import { baseSepolia } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 import { Job } from 'bullmq';
 
 import { logger } from '~/pkg/logging';
@@ -13,7 +13,7 @@ import { enrichERC20Tokens } from './handlers/enrichTokens';
 export default async function (job: Job) {
   logger.info(`Starting job...`, { jobName: job.name, jobData: job.data });
   //SUPPORTED CHAINS baseSepolia, sepolia, fraxtalTestnet, arbitrumSepolia, optimismSepolia, polygonAmoy];
-  const supportedChains = [baseSepolia];
+  const supportedChains = [sepolia];
 
   if (job.name === 'fetch-smart-accounts') {
     // await fetchSmartAccounts(polygonAmoy, Network.MATIC_AMOY);

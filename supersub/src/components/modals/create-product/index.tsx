@@ -10,6 +10,7 @@ import { ISubscriptionPlan } from "types/subscription";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supportedChains, supportedTokens } from "constants/data";
 import { ArrowLeft, CameraPlus, CaretDoubleRight } from "@phosphor-icons/react";
+import { defaultChain, defaultToken } from "utils/wagmi";
 
 const CreateProductModal = () => {
   const { createProduct } = useApp();
@@ -17,11 +18,9 @@ const CreateProductModal = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [recipient, setRecipient] = useState("");
-  const [chargeToken, setChargeToken] = useState(
-    supportedTokens["0x036CbD53842c5426634e7929541eC2318f3dCF7e"]
-  );
+  const [chargeToken, setChargeToken] = useState(supportedTokens[defaultToken]);
   const [destinationChain, setDestinationChain] = useState(
-    supportedChains["base_sepolia"]
+    supportedChains[defaultChain.id]
   );
 
   const [loading, setLoading] = useState(false);
@@ -60,7 +59,7 @@ const CreateProductModal = () => {
   const productData = useMemo(() => {
     const plansFormated = plans.map((plan) => {
       return {
-        price: Number(parseUnits(plan?.amount || "", chargeToken.decimals)),
+        price: parseUnits(plan?.amount || "", chargeToken.decimals),
         chargeInterval:
           Number(plan.interval) *
           (plan.timeframe === "days"
@@ -187,6 +186,7 @@ const CreateProductModal = () => {
           setRecipient={setRecipient}
           setDescription={setDescription}
           setChargeToken={setChargeToken}
+          //@ts-ignore
           setDestinationChain={setDestinationChain}
         />
       ) : (

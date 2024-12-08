@@ -1,14 +1,15 @@
 import "./auth.scss";
 import { useApp } from "contexts";
 import {
-  Infinity,
-  ArrowRight,
   ShieldCheck,
+  Infinity,
   Fingerprint,
+  ArrowRight,
 } from "@phosphor-icons/react";
 
 const Auth = () => {
-  const { login, authenticated, isMfaEnabled } = useApp();
+  const { login, ready, authenticated, isMfaEnabled, isSmartAccountReady } =
+    useApp();
 
   return (
     <div className="auth">

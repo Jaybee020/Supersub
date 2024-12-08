@@ -1,7 +1,7 @@
 import { Address } from "viem";
 
 interface Plan {
-  price: number;
+  price: number | bigint;
   chargeInterval: number;
   tokenAddress?: string;
   receivingAddress?: string;

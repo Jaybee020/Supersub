@@ -40,6 +40,16 @@
         "internalType": "address",
         "name": "_tokenBridge",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_ethFeeProxy",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_erc20FeeProxy",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -323,6 +333,12 @@
         "internalType": "uint256",
         "name": "timestamp",
         "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes",
+        "name": "paymentReference",
+        "type": "bytes"
       }
     ],
     "name": "SubscriptionCharged",
@@ -476,6 +492,21 @@
         "internalType": "address",
         "name": "beneficiary",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "feeRecipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "feePercentage",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_paymentReference",
+        "type": "bytes"
       }
     ],
     "name": "charge",
@@ -654,6 +685,32 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "erc20FeeProxy",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ethFeeProxy",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

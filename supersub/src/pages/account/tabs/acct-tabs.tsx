@@ -3,7 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 const AccountTabs = () => {
   return (
     <div className="account-tabs">
-      {/* <div className="account-tabs__header">
+      <div className="account-tabs__header">
         <div className="c-toggle-btns">
           {["tokens", "history"].map((item, index) => {
             return (
@@ -17,7 +17,7 @@ const AccountTabs = () => {
             );
           })}
         </div>
-      </div> */}
+      </div>
 
       <Outlet />
     </div>

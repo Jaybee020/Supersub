@@ -6,6 +6,8 @@ import { Modals } from "./AppProvider";
 import EditProductModal from "components/modals/edit-product";
 import CreateProductModal from "components/modals/create-product";
 import ProductPreviewModal from "components/modals/product-preview";
+import EditSubscriptionModal from "components/modals/edit-subscription";
+import EditPlanModal from "components/modals/edit-plan";
 
 Modal.setAppElement("#root");
 
@@ -35,6 +37,19 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
     openModal("edit-product");
   };
 
+  //EDIT PLAN MODAL
+  const [activePlan, setActivePlan] = useState<any>(null);
+  const openEditPlanModal = (plan: any) => {
+    setActivePlan(plan);
+    openModal("edit-plan");
+  };
+  //EDIT SUBSCRIPTION MODAL
+  const [activeSubscription, setActiveSubscription] = useState<any>(null);
+  const openEditSubscriptionModal = (subscription: any) => {
+    setActiveSubscription(subscription);
+    openModal("edit-subscription");
+  };
+
   // CLOSE MODAL
   const closeModal = () => {
     setModalStatus(false);
@@ -46,10 +61,14 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
       value={{
         activeModal,
         activeProduct,
+        activePlan,
+        activeSubscription,
 
         openModal,
         closeModal,
         openEditProductModal,
+        openEditPlanModal,
+        openEditSubscriptionModal,
       }}
     >
       <>
@@ -65,6 +84,10 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
             <ProductPreviewModal />
           ) : activeModal === "edit-product" ? (
             <EditProductModal />
+          ) : activeModal === "edit-plan" ? (
+            <EditPlanModal />
+          ) : activeModal === "edit-subscription" ? (
+            <EditSubscriptionModal />
           ) : null}
         </Modal>
 
@@ -82,11 +105,15 @@ interface ModalProviderProps {
 
 interface ModalContextType {
   activeProduct: any;
+  activePlan: any;
+  activeSubscription: any;
   activeModal: string;
 
   closeModal: () => void;
   openModal: (modal: Modals) => void;
   openEditProductModal: (product: any) => void;
+  openEditPlanModal: (plan: any) => void;
+  openEditSubscriptionModal: (subscription: any) => void;
 }
 
 export const ModalContext = createContext<ModalContextType>(

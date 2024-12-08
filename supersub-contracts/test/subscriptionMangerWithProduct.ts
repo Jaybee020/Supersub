@@ -25,7 +25,9 @@ describe('Subscription Manager With Products', function () {
       swapFactoryAddr,
       swapRouterAddr,
       WETH,
-      '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+      '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+      '0x1892196E80C4c17ea5100Da765Ab48c1fE2Fb814',
+      '0xd9C3889eB8DA6ce449bfFE3cd194d08A436e96f2'
     );
 
     return {

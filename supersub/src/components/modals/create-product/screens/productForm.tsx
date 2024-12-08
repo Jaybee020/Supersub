@@ -2,6 +2,7 @@ import { truncate } from "utils/HelperUtils";
 import useAppObjMenu from "hooks/useAppObjMenu";
 import { CaretDown } from "@phosphor-icons/react";
 import { supportedChains, supportedTokens } from "constants/data";
+import { defaultChain, defaultToken } from "utils/wagmi";
 
 interface IProductForm {
   name: string;
@@ -34,8 +35,7 @@ const ProductForm = ({
     objecKey: "symbol",
     toggleCallback: (val) => setChargeToken(val),
     items: Object.values(supportedTokens),
-    defaultOption:
-      supportedTokens["0x036CbD53842c5426634e7929541eC2318f3dCF7e"],
+    defaultOption: supportedTokens[defaultToken],
   });
 
   const [ChainMenu, selectedChain] = useAppObjMenu({
@@ -43,7 +43,7 @@ const ProductForm = ({
     objecKey: "chain_name",
     menuClass: "chain-menu",
     items: Object.values(supportedChains),
-    defaultOption: supportedChains["base_sepolia"],
+    defaultOption: supportedChains[defaultChain.id],
     toggleCallback: (value) => setDestinationChain(value),
   });
 

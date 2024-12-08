@@ -2,7 +2,7 @@
 FROM node:current-slim
 
 # Set the DATABASE_URL argument for Prisma
-ENV DATABASE_URL="postgres://supersub_server:KmOs7d6Y5te5ynG@supersub-server-db.flycast:5432/supersub_server?sslmode=disable"
+ENV DATABASE_URL="postgres://postgres:rW8tjWMUtVhdxue@supersub-server-db.flycast:5432/supersub_server?sslmode=disable"
 
 # Required for Prisma client to work in a Docker container
 RUN apt-get update && apt-get install -y openssl

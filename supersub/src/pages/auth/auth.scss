@@ -2,6 +2,7 @@
   @include flex_row();
   width: 1100px;
   height: 576px;
+  max-width: 100%;
 
   padding: 10px;
   border-radius: 16px;
@@ -101,6 +102,39 @@
         p {
           font-size: 16px;
           font-weight: 500;
+        }
+      }
+    }
+  }
+
+  @include tablet {
+    height: auto;
+    flex-direction: column;
+    .get-started {
+      min-height: 400px;
+      &__body {
+        h3 {
+          font-size: 38px;
+        }
+      }
+    }
+    .features {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @include phone {
+    .features {
+      width: 100%;
+      max-width: 100%;
+      &--block__text {
+        @include flex_col();
+        h1 {
+          font-size: 38px;
+        }
+        p {
+          font-size: 14px;
         }
       }
     }

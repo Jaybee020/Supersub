@@ -19,6 +19,8 @@ import {
   XCircle,
 } from "@phosphor-icons/react";
 import Pay from "pages/pay/pay";
+import { ReceiptInfo } from "pages/receipt/receipt";
+import Product from "pages/productDetails/productDetails";
 
 function App() {
   const { ready, authenticated, isMfaEnabled, isSmartAccountReady } = useApp();
@@ -40,6 +42,8 @@ function App() {
               {authenticated && isMfaEnabled ? (
                 <>
                   <Route path="/subscribe" element={<Pay />} />
+                  <Route path="/transaction" element={<ReceiptInfo />} />
+                  <Route path="/product" element={<Product />} />
 
                   <Route path="/" element={<Tabs />}>
                     <Route path="/" element={<Account />}>
@@ -55,6 +59,9 @@ function App() {
               ) : (
                 <>
                   <Route path="/subscribe" element={<Pay />} />
+                  <Route path="/transaction" element={<ReceiptInfo />} />
+                  <Route path="/product" element={<Product />} />
+
                   <Route path="/*" element={<Auth />} />
                 </>
               )}
