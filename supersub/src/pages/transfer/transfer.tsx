@@ -218,7 +218,7 @@ const Transfer = () => {
 
         <div
           onClick={() => onRamp()}
-          className={`base-btn ${!loading ? "disabled" : ""}`}
+          className={`base-btn`}
           style={{ width: "220px", alignSelf: "center", height: "45px" }}
         >
           <p>Fund from bank</p>
